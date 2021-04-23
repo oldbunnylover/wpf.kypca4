@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="fonts\Museo Cyrl 500.otf" />
+    <None Remove="img\book.ico" />
+    <None Remove="img\write.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="fonts\Museo Cyrl 500.otf" />
+    <Resource Include="img\book.ico" />
+    <Resource Include="img\write.ico" />
+  </ItemGroup>
+
+</Project>
