@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="fonts\Museo Cyrl 500.otf" />
-    <None Remove="img\book.ico" />
-    <None Remove="img\write.ico" />
+    <None Remove="Styles\fonts\Museo Cyrl 500.otf" />
+    <None Remove="Styles\img\book.ico" />
+    <None Remove="Styles\img\write.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,9 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="fonts\Museo Cyrl 500.otf" />
-    <Resource Include="img\book.ico" />
-    <Resource Include="img\write.ico" />
+    <Resource Include="Styles\fonts\Museo Cyrl 500.otf" />
+    <Resource Include="Styles\img\book.ico" />
+    <Resource Include="Styles\img\write.ico" />
   </ItemGroup>
 
 </Project>

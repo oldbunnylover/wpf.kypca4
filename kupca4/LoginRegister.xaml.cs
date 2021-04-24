@@ -15,10 +15,5 @@ namespace kupca4
             if (e.LeftButton == MouseButtonState.Pressed)
                 DragMove();
         }
-
-        private void Close_Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
     }
 }

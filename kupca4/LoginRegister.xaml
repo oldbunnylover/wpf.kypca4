@@ -4,8 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:kupca4.ViewModels"
+        xmlns:cmd="clr-namespace:kupca4.Helpers.Commands"
         mc:Ignorable="d"
         Style="{DynamicResource AuthWindow}" MouseDown="Window_MouseDown">
+    <Window.DataContext>
+        <vm:LoginRegisterViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -37,8 +42,11 @@
         <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Псевдоним" 
                  Margin="56,189.578,56,142.633" Background="#B4F2F1EF" Grid.Column="1" />
 
-        <Button Grid.Column="1" Click="Close_Button_Click" Padding="1" VerticalAlignment="Top" HorizontalAlignment="Right" Width="25" Height="25" Margin="0 3 5 0" Background="Transparent" BorderBrush="Transparent">
+        <Button Grid.Column="1" Padding="1" VerticalAlignment="Top" HorizontalAlignment="Right" Width="25" Height="25" Margin="0 3 5 0" Background="Transparent" BorderBrush="Transparent">
             <materialDesign:PackIcon Kind="Close" Width="25" Height="25" Foreground="#ffffff" />
+            <Button.Command>
+                <cmd:AppClose/>
+            </Button.Command>
         </Button>
     </Grid>
 </Window>
