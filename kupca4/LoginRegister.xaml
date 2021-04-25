@@ -30,21 +30,21 @@
         </Grid.ColumnDefinitions>
         <Rectangle Grid.Column="0" RadiusX="15" RadiusY="15" Fill="#F2F1EF"/>
         <Rectangle Grid.Column="0" Fill="#F2F1EF" Margin="311,0,0,0"/>
-        <TextBox Grid.Column="0" Style="{StaticResource MaterialDesignFilledTextBox}" 
-                 MaxWidth="400" materialDesign:HintAssist.Hint="Псевдоним" Margin="56,138,56,193" Background="#7FA37C82" />
         <TextBlock Grid.Column="0" Height="44" Width="240.25" FontSize="30" 
-                   Foreground="#6E304B" Margin="54.875,38,54.875,293"><Run Language="ru-ru" Text="Войти в аккаунт"/></TextBlock>
-        <PasswordBox Grid.Column="0" Style="{StaticResource MaterialDesignFilledPasswordBox}" materialDesign:HintAssist.Hint="Пароль" 
+                   Foreground="#6E304B" Margin="54.875,38,54.875,293" Text="Войти в аккаунт"/>
+        <TextBox Grid.Column="0" Style="{StaticResource MaterialDesignFilledTextBox}" 
+                 MaxWidth="400" materialDesign:HintAssist.Hint="Псевдоним" Margin="56,138,56,193" Background="#7FA37C82" Text="{Binding loginUsername}"/>
+        <PasswordBox x:Name="loginPassBox" Grid.Column="0" Style="{StaticResource MaterialDesignFilledPasswordBox}" materialDesign:HintAssist.Hint="Пароль" 
                      Margin="56,205.389,56,125.611" Background="#7FA37C82" />
-        <Button Grid.Column="0" Style="{StaticResource MaterialDesignRaisedButton}" materialDesign:ButtonProgressAssist.IsIndicatorVisible="False" 
-                materialDesign:ButtonProgressAssist.IsIndeterminate="True" Content="Войти" Margin="76,311,76,32"/>
+        <Button Grid.Column="0" Style="{StaticResource MaterialDesignRaisedButton}" materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding loading}" 
+                materialDesign:ButtonProgressAssist.IsIndeterminate="True" Content="Войти" Margin="76,311,76,32"
+                Command="{Binding Path=LoginCommand}" CommandParameter="{Binding ElementName=loginPassBox}"/>
         <Rectangle Grid.Column="1" RadiusX="15" RadiusY="15" Fill="#A37C82"/>
         <Rectangle Grid.Column="1" Fill="#A37C82" Margin="0,0,319,0"/>
-        <TextBlock Height="44" Width="184.8" FontSize="30" Foreground="#F2F1EF" Grid.Column="1" Margin="82.6,38,82.6,293">
-            <Run Language="ru-ru" Text="Регистрация"/>
-        </TextBlock>
+        <TextBlock Height="44" Width="184.8" FontSize="30" Foreground="#F2F1EF" Grid.Column="1" Margin="82.6,38,82.6,293" Text="Регистрация"/>
         <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Content="Зарегистрироваться" 
-                Margin="76,311,76,32" Grid.Column="1" Command="{Binding Path=RegisterCommand}" CommandParameter="{Binding ElementName=passBox}"/>
+                Margin="76,311,76,32" Grid.Column="1" Command="{Binding Path=RegisterCommand}" CommandParameter="{Binding ElementName=passBox}"
+                materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding loading}" materialDesign:ButtonProgressAssist.IsIndeterminate="True"/>
         <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Имя" 
                  Margin="56,94,56,238.211" Background="#B4F2F1EF" Grid.Column="1" Text="{Binding name}"/>
         <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Фамилия" 

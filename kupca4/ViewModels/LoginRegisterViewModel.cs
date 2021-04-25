@@ -17,6 +17,7 @@ namespace kupca4.ViewModels
         private string _name;
         private string _surname;
         private string _registerUsername;
+        private string _loginUsername;
         private bool _loading = false;
         private bool _dialog = false;
         private string _dialogText;
@@ -41,6 +42,12 @@ namespace kupca4.ViewModels
         {
             get => _registerUsername;
             set => Set(ref _registerUsername, value);
+        }
+
+        public string loginUsername
+        {
+            get => _loginUsername;
+            set => Set(ref _loginUsername, value);
         }
 
         public bool loading
@@ -93,8 +100,41 @@ namespace kupca4.ViewModels
                     }
                     else
                     {
-                        dialog = true;
                         dialogText = "Пользователь с данным псевдонимом уже зарегистрирован.";
+                        dialog = true;
+                    }
+                }
+            );
+        }
+
+
+        public ICommand LoginCommand { get; }
+        private bool CanLoginCommandExecute(object p) => loginUsername?.Length > 0 && (p as PasswordBox).Password?.Length > 0;
+        private void OnLoginCommandExecuted(object p)
+        {
+            loading = true;
+            ThreadPool.QueueUserWorkItem(
+                delegate
+                {
+                    if (context.Users.FirstOrDefault(u => u.Username == loginUsername && u.Password == User.getHash((p as PasswordBox).Password)) != null)
+                    {
+                        User user = context.Users.FirstOrDefault(u => u.Username == loginUsername);
+                        var MainWindowViewModel = new MainWindowViewModel(user);
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            var MainWindow = new MainWindow
+                            {
+                                DataContext = MainWindowViewModel
+                            };
+                            MainWindow.Show();
+                            Application.Current.MainWindow.Close();
+                        });
+                    }
+                    else
+                    {
+                        loading = false;
+                        dialogText = "Неверный логин или пароль.";
+                        dialog = true;
                     }
                 }
             );
@@ -112,6 +152,7 @@ namespace kupca4.ViewModels
 
             RegisterCommand = new LambdaCommand(OnRegisterCommandExecuted, CanRegisterCommandExecute);
             CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted, CanCloseDialogCommandExecute);
+            LoginCommand = new LambdaCommand(OnLoginCommandExecuted, CanLoginCommandExecute);
 
             #endregion
         }
