@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace kupca4.ViewModels.Base
 {
-    abstract class ViewModel : INotifyPropertyChanged
+    public abstract class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

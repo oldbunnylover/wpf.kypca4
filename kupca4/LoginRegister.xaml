@@ -7,10 +7,22 @@
         xmlns:vm="clr-namespace:kupca4.ViewModels"
         xmlns:cmd="clr-namespace:kupca4.Helpers.Commands"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         Style="{DynamicResource AuthWindow}" MouseDown="Window_MouseDown">
     <Window.DataContext>
         <vm:LoginRegisterViewModel/>
     </Window.DataContext>
+    <materialDesign:DialogHost 
+        IsOpen="{Binding dialog}">
+        <materialDesign:DialogHost.DialogContent>
+            <Border Height="Auto" Width="Auto">
+                <StackPanel Margin="16">
+                    <TextBlock Text="{Binding dialogText}"/>
+                    <Button Margin="0 10 0 0" Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                Content="Закрыть" Foreground="#6E304B" Width="90" Height="30" Command="{Binding CloseDialogCommand}"/>
+                </StackPanel>
+            </Border>
+        </materialDesign:DialogHost.DialogContent>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -32,16 +44,15 @@
             <Run Language="ru-ru" Text="Регистрация"/>
         </TextBlock>
         <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Content="Зарегистрироваться" 
-                Margin="76,311,76,32" Grid.Column="1"/>
-        <PasswordBox Style="{StaticResource MaterialDesignFilledPasswordBox}" materialDesign:HintAssist.Hint="Пароль" 
-                     Margin="56,238.8,56,93.411" Background="#B2F2F1EF" Grid.Column="1" />
+                Margin="76,311,76,32" Grid.Column="1" Command="{Binding Path=RegisterCommand}" CommandParameter="{Binding ElementName=passBox}"/>
         <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Имя" 
-                 Margin="56,94,56,238.211" Background="#B4F2F1EF" Grid.Column="1" />
+                 Margin="56,94,56,238.211" Background="#B4F2F1EF" Grid.Column="1" Text="{Binding name}"/>
         <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Фамилия" 
-                 Margin="56,141.789,56,190.422" Background="#B4F2F1EF" Grid.Column="1" />
+                 Margin="56,141.789,56,190.422" Background="#B4F2F1EF" Grid.Column="1" Text="{Binding surname}"/>
         <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Псевдоним" 
-                 Margin="56,189.578,56,142.633" Background="#B4F2F1EF" Grid.Column="1" />
-
+                 Margin="56,189.578,56,142.633" Background="#B4F2F1EF" Grid.Column="1" Text="{Binding registerUsername}"/>
+        <PasswordBox x:Name="passBox" Style="{StaticResource MaterialDesignFilledPasswordBox}" materialDesign:HintAssist.Hint="Пароль" 
+                     Margin="56,238.8,56,93.411" Background="#B2F2F1EF" Grid.Column="1"/>
         <Button Grid.Column="1" Padding="1" VerticalAlignment="Top" HorizontalAlignment="Right" Width="25" Height="25" Margin="0 3 5 0" Background="Transparent" BorderBrush="Transparent">
             <materialDesign:PackIcon Kind="Close" Width="25" Height="25" Foreground="#ffffff" />
             <Button.Command>
@@ -49,4 +60,5 @@
             </Button.Command>
         </Button>
     </Grid>
+    </materialDesign:DialogHost>
 </Window>

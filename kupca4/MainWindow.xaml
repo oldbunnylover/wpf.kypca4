@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
         <Grid VerticalAlignment="Top" Background="#A37C82">
             <TextBlock WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Left"
-                       Text="DUCKLIBRARY" Margin="13.5,4.52,0,4.52" Foreground="#F2F1EF"/>
+                       Text="{Binding title}" Margin="13.5,4.52,0,4.52" Foreground="#F2F1EF"/>
             <StackPanel WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent">
                     <materialDesign:PackIcon Kind="WindowMinimize" />
