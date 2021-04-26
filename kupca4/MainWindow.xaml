@@ -3,12 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cmd="clr-namespace:kupca4.Helpers.Commands"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Style="{DynamicResource MainWindow}">
+        SourceInitialized="Window_SourceInitialized"
+        Style="{DynamicResource MainWindow}"
+        WindowState="{Binding windowState}">
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="15"/>
+        <WindowChrome CaptionHeight="25"/>
     </WindowChrome.WindowChrome>
     <Grid>
         <Grid.RowDefinitions>
@@ -17,16 +20,19 @@
         </Grid.RowDefinitions>
         <Grid VerticalAlignment="Top" Background="#A37C82">
             <TextBlock WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Left"
-                       Text="{Binding title}" Margin="13.5,4.52,0,4.52" Foreground="#F2F1EF"/>
+                       Text="{Binding test}" Margin="13.5,4.52,0,4.52" Foreground="#F2F1EF"/>
             <StackPanel WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent">
+                <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Command="{Binding WindowMinimizedCommand}">
                     <materialDesign:PackIcon Kind="WindowMinimize" />
                 </Button>
-                <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent">
-                    <materialDesign:PackIcon Kind="WindowMaximize" />
+                <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Command="{Binding WindowMaximizeCommand}">
+                    <materialDesign:PackIcon Kind="WindowMaximize"/>
                 </Button>
                 <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent">
                     <materialDesign:PackIcon Kind="WindowClose" />
+                    <Button.Command>
+                        <cmd:AppClose/>
+                    </Button.Command>
                 </Button>
             </StackPanel>
         </Grid>
