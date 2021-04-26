@@ -16,7 +16,9 @@ namespace kupca4.ViewModels
         private string _name;
         private string _surname;
         private string _registerUsername;
+        private string _registerPassword;
         private string _loginUsername;
+        private string _loginPassword;
         private bool _loading = false;
         private bool _dialog = false;
         private string _dialogText;
@@ -43,10 +45,22 @@ namespace kupca4.ViewModels
             set => Set(ref _registerUsername, value);
         }
 
+        public string registerPassword
+        {
+            get => _registerPassword;
+            set => Set(ref _registerPassword, value);
+        }
+
         public string loginUsername
         {
             get => _loginUsername;
             set => Set(ref _loginUsername, value);
+        }
+
+        public string loginPassword
+        {
+            get => _loginPassword;
+            set => Set(ref _loginPassword, value);
         }
 
         public bool loading
@@ -73,13 +87,13 @@ namespace kupca4.ViewModels
 
         public ICommand RegisterCommand { get; }
         private bool CanRegisterCommandExecute(object p) => name?.Length > 0 && surname?.Length > 0 
-            && registerUsername?.Length > 0 && (p as PasswordBox).Password?.Length > 0;
+            && registerUsername?.Length > 0 && registerPassword?.Length > 0;
 
         private void OnRegisterCommandExecuted(object p)
         {
             if (context.Users.FirstOrDefault(u => u.Username == registerUsername) == null)
             {
-                User user = new User(name, surname, registerUsername, (p as PasswordBox).Password);
+                User user = new User(name, surname, registerUsername, registerPassword);
                 context.Users.Add(user);
                 context.SaveChanges();
                 var MainWindowViewModel = new MainWindowViewModel(user);
@@ -88,7 +102,7 @@ namespace kupca4.ViewModels
                     DataContext = MainWindowViewModel
                 };
                 MainWindow.Show();
-                Application.Current.MainWindow.Close();
+                (p as Window).Close();
             }
             else
             {
@@ -98,11 +112,11 @@ namespace kupca4.ViewModels
         }
 
         public ICommand LoginCommand { get; }
-        private bool CanLoginCommandExecute(object p) => loginUsername?.Length > 0 && (p as PasswordBox).Password?.Length > 0;
+        private bool CanLoginCommandExecute(object p) => loginUsername?.Length > 0 && loginPassword?.Length > 0;
         private void OnLoginCommandExecuted(object p)
         {
             loading = true;
-            if (context.Users.FirstOrDefault(u => u.Username == loginUsername && u.Password == User.getHash((p as PasswordBox).Password)) != null)
+            if (context.Users.FirstOrDefault(u => u.Username == loginUsername && u.Password == User.getHash(loginPassword)) != null)
             {
                 User user = context.Users.FirstOrDefault(u => u.Username == loginUsername);
                 var MainWindowViewModel = new MainWindowViewModel(user);
@@ -111,7 +125,7 @@ namespace kupca4.ViewModels
                     DataContext = MainWindowViewModel
                 };
                 MainWindow.Show();
-                Application.Current.MainWindow.Close();
+                (p as Window).Close();
             }
             else
             {

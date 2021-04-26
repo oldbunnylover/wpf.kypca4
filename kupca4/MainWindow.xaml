@@ -8,12 +8,11 @@
         xmlns:local="clr-namespace:kupca4"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
-        SourceInitialized="Window_SourceInitialized"
+        WindowStartupLocation="CenterScreen" SourceInitialized="Window_SourceInitialized"
         Style="{DynamicResource MainWindow}"
         WindowState="{Binding windowState}">
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="25"/>
+        <WindowChrome CaptionHeight="15"/>
     </WindowChrome.WindowChrome>
     <Grid>
         <Grid.RowDefinitions>
@@ -27,7 +26,7 @@
                 <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Command="{Binding WindowMinimizedCommand}">
                     <materialDesign:PackIcon Kind="WindowMinimize" />
                 </Button>
-                <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Command="{Binding WindowMaximizeCommand}">
+                <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Command="{Binding WindowMaximizeCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}}">
                     <materialDesign:PackIcon Kind="WindowMaximize"/>
                 </Button>
                 <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent">
