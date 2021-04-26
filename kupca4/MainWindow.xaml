@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cmd="clr-namespace:kupca4.Helpers.Commands"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:kupca4"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         SourceInitialized="Window_SourceInitialized"
@@ -72,6 +74,11 @@
              VerticalOffset="10"/>
                     </ListViewItem.ToolTip>
                     <materialDesign:PackIcon Kind="ExitToApp" Width="40" Height="40"/>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding SwitchUserCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </ListViewItem>
             </ListView>
         </StackPanel>

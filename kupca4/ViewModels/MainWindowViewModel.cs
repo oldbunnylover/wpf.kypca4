@@ -47,7 +47,7 @@ namespace kupca4.ViewModels
         {
             var LoginRegister = new LoginRegister();
             LoginRegister.Show();
-            Application.Current.MainWindow.Close();
+            (p as Window).Close();
         }
 
         #endregion
