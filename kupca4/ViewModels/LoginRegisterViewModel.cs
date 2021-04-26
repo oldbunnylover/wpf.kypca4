@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -77,48 +78,66 @@ namespace kupca4.ViewModels
 
         private void OnRegisterCommandExecuted(object p)
         {
-            if (context.Users.FirstOrDefault(u => u.Username == registerUsername) == null)
-            {
-                User user = new User(name, surname, registerUsername, (p as PasswordBox).Password);
-                context.Users.Add(user);
-                context.SaveChanges();
-                var MainWindowViewModel = new MainWindowViewModel(user);
-                var MainWindow = new MainWindow
+            var password = (p as PasswordBox).Password;
+            ThreadPool.QueueUserWorkItem(
+                delegate
                 {
-                    DataContext = MainWindowViewModel
-                };
-                MainWindow.Show();
-                Application.Current.MainWindow.Close();
-            }
-            else
-            {
-                dialogText = "Пользователь с данным псевдонимом уже зарегистрирован.";
-                dialog = true;
-            }
+                    if (context.Users.FirstOrDefault(u => u.Username == registerUsername) == null)
+                    {
+                        User user = new User(name, surname, registerUsername, password);
+                        context.Users.Add(user);
+                        context.SaveChanges();
+                        var MainWindowViewModel = new MainWindowViewModel(user);
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            var MainWindow = new MainWindow
+                            {
+                                DataContext = MainWindowViewModel
+                            };
+                            MainWindow.Show();
+                            Application.Current.MainWindow.Close();
+                        });
+                    }
+                    else
+                    {
+                        dialogText = "Пользователь с данным псевдонимом уже зарегистрирован.";
+                        dialog = true;
+                    }
+                }
+            );
         }
+
 
         public ICommand LoginCommand { get; }
         private bool CanLoginCommandExecute(object p) => loginUsername?.Length > 0 && (p as PasswordBox).Password?.Length > 0;
         private void OnLoginCommandExecuted(object p)
         {
             loading = true;
-            if (context.Users.FirstOrDefault(u => u.Username == loginUsername && u.Password == User.getHash((p as PasswordBox).Password)) != null)
-            {
-                User user = context.Users.FirstOrDefault(u => u.Username == loginUsername);
-                var MainWindowViewModel = new MainWindowViewModel(user);
-                var MainWindow = new MainWindow
+            ThreadPool.QueueUserWorkItem(
+                delegate
                 {
-                    DataContext = MainWindowViewModel
-                };
-                MainWindow.Show();
-                Application.Current.MainWindow.Close();
-            }
-            else
-            {
-                loading = false;
-                dialogText = "Неверный логин или пароль.";
-                dialog = true;
-            }
+                    if (context.Users.FirstOrDefault(u => u.Username == loginUsername && u.Password == User.getHash((p as PasswordBox).Password)) != null)
+                    {
+                        User user = context.Users.FirstOrDefault(u => u.Username == loginUsername);
+                        var MainWindowViewModel = new MainWindowViewModel(user);
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            var MainWindow = new MainWindow
+                            {
+                                DataContext = MainWindowViewModel
+                            };
+                            MainWindow.Show();
+                            Application.Current.MainWindow.Close();
+                        });
+                    }
+                    else
+                    {
+                        loading = false;
+                        dialogText = "Неверный логин или пароль.";
+                        dialog = true;
+                    }
+                }
+            );
         }
 
         public ICommand CloseDialogCommand { get; }

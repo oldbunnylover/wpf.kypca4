@@ -1,7 +1,4 @@
-﻿using kupca4.Helpers;
-using System;
-using System.Windows;
-using System.Windows.Interop;
+﻿using System.Windows;
 
 namespace kupca4
 {
@@ -11,24 +8,5 @@ namespace kupca4
         {
             InitializeComponent();
         }
-
-        private void Window_SourceInitialized(object sender, EventArgs e)
-        {
-            IntPtr handle = new WindowInteropHelper(this).Handle;
-            HwndSource.FromHwnd(handle)?.AddHook(WindowProc);
-        }
-
-        private IntPtr WindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            switch (msg)
-            {
-                case 0x0024:
-                    MaximizeFix.WmGetMinMaxInfo(hwnd, lParam, (int)MinWidth, (int)MinHeight);
-                    handled = true;
-                    break;
-            }
-
-            return (IntPtr)0;
-        }
-    }   
+    }
 }
