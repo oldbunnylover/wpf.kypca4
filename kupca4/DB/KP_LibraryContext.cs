@@ -17,7 +17,6 @@ namespace kupca4.DB
         }
 
         public virtual DbSet<Book> Books { get; set; }
-        public virtual DbSet<BooksAuthor> BooksAuthors { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<SavedBook> SavedBooks { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -66,30 +65,6 @@ namespace kupca4.DB
                     .WithMany(p => p.Books)
                     .HasForeignKey(d => d.GenreId)
                     .HasConstraintName("FK__Books__genreID__02FC7413");
-            });
-
-            modelBuilder.Entity<BooksAuthor>(entity =>
-            {
-                entity.HasKey(e => new { e.Username, e.BookId })
-                    .HasName("PK__BooksAut__3B659F617CA45D2F");
-
-                entity.Property(e => e.Username)
-                    .HasMaxLength(255)
-                    .HasColumnName("username");
-
-                entity.Property(e => e.BookId).HasColumnName("bookID");
-
-                entity.HasOne(d => d.Book)
-                    .WithMany(p => p.BooksAuthors)
-                    .HasForeignKey(d => d.BookId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__BooksAuth__bookI__0A9D95DB");
-
-                entity.HasOne(d => d.UsernameNavigation)
-                    .WithMany(p => p.BooksAuthors)
-                    .HasForeignKey(d => d.Username)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__BooksAuth__usern__09A971A2");
             });
 
             modelBuilder.Entity<Genre>(entity =>

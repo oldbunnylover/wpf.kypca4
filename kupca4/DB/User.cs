@@ -11,7 +11,6 @@ namespace kupca4.DB
     {
         public User()
         {
-            BooksAuthors = new HashSet<BooksAuthor>();
             SavedBooks = new HashSet<SavedBook>();
         }
 
@@ -35,7 +34,6 @@ namespace kupca4.DB
             return Convert.ToBase64String(hash);
         }
 
-        public virtual ICollection<BooksAuthor> BooksAuthors { get; set; }
         public virtual ICollection<SavedBook> SavedBooks { get; set; }
     }
 }
