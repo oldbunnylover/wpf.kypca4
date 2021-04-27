@@ -1,6 +1,7 @@
 ﻿using kupca4.DB;
 using kupca4.Helpers.Commands;
 using kupca4.ViewModels.Base;
+using kupca4.ViewModels.Views;
 using System.Windows;
 using System.Windows.Input;
 
@@ -10,11 +11,18 @@ namespace kupca4.ViewModels
     {
         #region private fields
 
-        private User user;
+        private readonly User user;
+        private ViewModel _selectedVM;
         private WindowState _windowState = WindowState.Normal;
         #endregion
 
         #region public fields
+
+        public ViewModel selectedVM
+        {
+            get => _selectedVM;
+            set => Set(ref _selectedVM, value);
+        }
 
         public WindowState windowState
         {
@@ -50,6 +58,18 @@ namespace kupca4.ViewModels
             (p as Window).Close();
         }
 
+        public ICommand SwitchViewCommand { get; }
+        private bool CanSwitchViewCommandExecute(object p) => true;
+        private void OnSwitchViewCommandExecuted(object p)
+        {
+            switch (p.ToString())
+            {
+                case "BookUpload":
+                    selectedVM = new BookUploadViewModel(user);
+                    break;
+            }
+        }
+
         #endregion
 
         public MainWindowViewModel(User user)
@@ -59,6 +79,7 @@ namespace kupca4.ViewModels
             WindowMinimizedCommand = new LambdaCommand(OnWindowMinimizedCommandExecuted, CanWindowMinimizedCommandExecute);
             WindowMaximizeCommand = new LambdaCommand(OnWindowMaximizeCommandExecuted, CanWindowMaximizeCommandExecute);
             SwitchUserCommand = new LambdaCommand(OnSwitchUserCommandExecuted, CanSwitchUserCommandExecute);
+            SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted, CanSwitchViewCommandExecute);
         }
     }
 }

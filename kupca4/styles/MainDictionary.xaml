@@ -12,10 +12,10 @@
     </Style>
     <!--Главное окно-->
     <Style x:Key="MainWindow" TargetType="Window">
-        <Setter Property="MinWidth" Value="800"></Setter>
-        <Setter Property="MinHeight" Value="505"></Setter>
-        <Setter Property="Width" Value="800"></Setter>
-        <Setter Property="Height" Value="505"></Setter>
+        <Setter Property="MinWidth" Value="920"></Setter>
+        <Setter Property="MinHeight" Value="605"></Setter>
+        <Setter Property="Width" Value="920"></Setter>
+        <Setter Property="Height" Value="605"></Setter>
         <Setter Property="Title" Value="DuckLibrary"></Setter>
         <Setter Property="Background" Value="#F2F1EF"></Setter>
         <Setter Property="FontFamily" Value="/Styles/fonts/#Museo Cyrl 500"></Setter>
