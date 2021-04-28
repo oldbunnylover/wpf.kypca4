@@ -14,11 +14,20 @@ namespace kupca4.DB
         public int BookId { get; set; }
         public string Bookname { get; set; }
         public string Description { get; set; }
-        public string Filepath { get; set; }
         public bool? Applyed { get; set; }
-        public int? GenreId { get; set; }
+        public int GenreId { get; set; }
+        public string AuthorName { get; set; }
+
+        public Book(string Bookname, string Description, int GenreId, string AuthorName)
+        {
+            this.Bookname = Bookname;
+            this.Description = Description;
+            this.GenreId = GenreId;
+            this.AuthorName = AuthorName;
+        }
 
         public virtual Genre Genre { get; set; }
+        public virtual User User { get; set; }
         public virtual ICollection<SavedBook> SavedBooks { get; set; }
     }
 }

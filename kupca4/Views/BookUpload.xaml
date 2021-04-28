@@ -7,90 +7,108 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:BookUploadViewModel}"
-             d:DesignHeight="580" d:DesignWidth="864"
+             d:DesignHeight="585" d:DesignWidth="864"
              d:Background="#F2F1EF">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="56"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Rectangle Grid.Row="0" Grid.ColumnSpan="6" Fill="#BFA37C82"></Rectangle>
-        <TextBlock Text="Загрузка книги" Grid.ColumnSpan="2" FontSize="27" TextAlignment="Left" VerticalAlignment="Center" Foreground="#F2F1EF" Margin="20,0,0,0" />
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <StackPanel>
-                <Image Source="/Styles/img/noPhoto.png" Width="auto" MinWidth="180" MaxWidth="250" Margin="20 40"/>
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="20 0 0 0">
-                    <TextBlock Text="Выберите обложку книги" VerticalAlignment="Center" FontSize="18"/>
-                    <Button Grid.Column="1" HorizontalAlignment="Right" Height="30" Margin="15 0" Foreground="#F2F1EF">
-                        <materialDesign:PackIcon Kind="ImagePlus" Height="20" Width="25"/>
-                    </Button>
+    <materialDesign:DialogHost 
+        IsOpen="{Binding dialog}">
+        <materialDesign:DialogHost.DialogContent>
+            <Border Height="Auto" Width="Auto">
+                <StackPanel Margin="16">
+                    <TextBlock Text="{Binding selectedGenre}"/>
+                    <Button Margin="0 10 0 0" Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                Content="Закрыть" Foreground="#6E304B" Width="90" Height="30" Command="{Binding CloseDialogCommand}"/>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="20 20 0 0" Width="293">
-                    <TextBlock Text="Выберите файл книги" VerticalAlignment="Center" FontSize="18" Width="208"/>
-                    <Button Grid.Column="1" HorizontalAlignment="Right" Height="30" Margin="15 0" Foreground="#F2F1EF">
-                        <materialDesign:PackIcon Kind="FilePdf" Height="20" Width="25"/>
-                    </Button>
+            </Border>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="56"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Rectangle Grid.Row="0" Grid.ColumnSpan="6" Fill="#BFA37C82"></Rectangle>
+            <TextBlock Text="Загрузка книги" Grid.ColumnSpan="2" FontSize="27" TextAlignment="Left" VerticalAlignment="Center" Foreground="#F2F1EF" Margin="20,0,0,0" />
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <Image Source="{Binding bookPicture}" Width="auto" MinWidth="180" MaxWidth="200" Height="300" Margin="20 40"/>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="20 0 0 0">
+                        <TextBlock Text="Выберите обложку книги" VerticalAlignment="Center" FontSize="18"/>
+                        <Button Grid.Column="1" HorizontalAlignment="Right" Height="30" Margin="15 0 0 0" Foreground="#F2F1EF" Command="{Binding SelectImagePathCommand}">
+                            <materialDesign:PackIcon Kind="ImagePlus" Height="20" Width="25"/>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="20 15 0 0" Width="283">
+                        <TextBlock Text="Выберите файл книги" VerticalAlignment="Center" FontSize="18" Width="192"/>
+                        <Button Grid.Column="1" HorizontalAlignment="Right" Height="30" Margin="15 0 0 0" Foreground="#F2F1EF" Command="{Binding SelectPdfPathCommand}">
+                            <materialDesign:PackIcon Kind="FilePdf" Height="20" Width="25"/>
+                        </Button>
+                        <TextBlock VerticalAlignment="Center" Foreground="ForestGreen" Visibility="{Binding fileCheck}">
+                            <materialDesign:PackIcon Kind="Check" Height="15" Width="15"/>
+                        </TextBlock>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-            <Grid Margin="20" Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="1" Margin="0,10,0,0">
-                    <TextBox 
-                         VerticalAlignment="Top"
-                         HorizontalAlignment="Stretch"
-                         TextWrapping="Wrap"
-                         Height="30"
-                         Margin="20 10 20 10"
-                         MaxHeight="160"
-                         MaxWidth="400"
-                         materialDesign:HintAssist.Hint="Название"
-                         materialDesign:HintAssist.Foreground="#696969"
-                         FontSize="18" Grid.ColumnSpan="2" >
-                    </TextBox>
-                    <TextBox Grid.Row="1"
-                         Margin="20,10,20,20"
-                         AcceptsReturn="True"
-                         TextWrapping="Wrap"
-                         Height="161"
-                         MaxHeight="250"
-                         VerticalScrollBarVisibility="Auto"
-                         MaxWidth="400"
-                         materialDesign:HintAssist.Hint="Описание"
-                         materialDesign:HintAssist.Foreground="#696969"
-                         FontSize="18" Grid.ColumnSpan="2" >
-                    </TextBox>
-                    <ComboBox materialDesign:HintAssist.Hint="Жанр"
-                              ItemsSource="{Binding genres, Source={x:Type vm:BookUploadViewModel}}"
+                <Grid Margin="20" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="1" Margin="0,10,0,0">
+                        <TextBox 
+                             Text="{Binding title}"
+                             VerticalAlignment="Top"
+                             HorizontalAlignment="Stretch"
+                             TextWrapping="Wrap"
+                             Height="30"
+                             Margin="20 10 20 10"
+                             MaxHeight="160"
+                             MaxWidth="400"
+                             materialDesign:HintAssist.Hint="Название"
+                             materialDesign:HintAssist.Foreground="#696969"
+                             FontSize="18" Grid.ColumnSpan="2" >
+                        </TextBox>
+                        <TextBox Grid.Row="1"
+                             Text="{Binding description}"
+                             Margin="20,10,20,20"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             Height="161"
+                             MaxHeight="250"
+                             VerticalScrollBarVisibility="Auto"
+                             MaxWidth="400"
+                             materialDesign:HintAssist.Hint="Описание"
+                             materialDesign:HintAssist.Foreground="#696969"
+                             FontSize="18" Grid.ColumnSpan="2" >
+                        </TextBox>
+                        <ComboBox materialDesign:HintAssist.Hint="Жанр"
+                              ItemsSource="{Binding genres}"
+                                  SelectedItem="{Binding selectedGenre}"
                                   Margin="20 10 20 10"
                                   MaxHeight="60"
                                   MaxWidth="400"
                                   materialDesign:HintAssist.Foreground="#696969"
                                   FontSize="18">
-                    </ComboBox>
-                    <Button Foreground="#F2F1EF" Margin="0 25 0 0" FontSize="14" Width="120" Content="Загрузить"/>
-                    <TextBox 
-                        Text="{Binding newGenre}"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Stretch"
-                        TextWrapping="Wrap"
-                        Height="30"
-                        Margin="20 50 20 10"
-                        MaxHeight="160"
-                        MaxWidth="400"
-                        materialDesign:HintAssist.Hint="Новый жанр"
-                        materialDesign:HintAssist.Foreground="#696969"
-                        FontSize="18" Grid.ColumnSpan="2" >
-                    </TextBox>
-                    <Button Foreground="#F2F1EF" FontSize="14" Width="137" Content="Добавить жанр" Command="{Binding GenreAdd}"/>
-                </StackPanel>
+                        </ComboBox>
+                        <Button Foreground="#F2F1EF" Margin="0 25 0 0" FontSize="14" Width="120" Content="Загрузить" Command="{Binding BookUploadCommand}"/>
+                        <TextBox 
+                            Text="{Binding newGenre}"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Stretch"
+                            TextWrapping="Wrap"
+                            Height="30"
+                            Margin="20 50 20 10"
+                            MaxHeight="160"
+                            MaxWidth="400"
+                            materialDesign:HintAssist.Hint="Новый жанр"
+                            materialDesign:HintAssist.Foreground="#696969"
+                            FontSize="18" Grid.ColumnSpan="2" >
+                        </TextBox>
+                        <Button Foreground="#F2F1EF" FontSize="14" Width="137" Content="Добавить жанр" Command="{Binding GenreAddCommand}"/>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Grid>
-    </Grid>
+    </materialDesign:DialogHost>
 </UserControl>

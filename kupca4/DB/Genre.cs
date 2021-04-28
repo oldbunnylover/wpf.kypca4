@@ -14,6 +14,11 @@ namespace kupca4.DB
         public int GenreId { get; set; }
         public string Genrename { get; set; }
 
+        public override string ToString()
+        {
+            return Genrename;
+        }
+
         public virtual ICollection<Book> Books { get; set; }
     }
 }

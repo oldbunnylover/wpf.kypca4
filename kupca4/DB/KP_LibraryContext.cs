@@ -35,8 +35,6 @@ namespace kupca4.DB
 
             modelBuilder.Entity<Book>(entity =>
             {
-                entity.HasIndex(e => e.Filepath, "UQ__Books__DFE356BEF3389416")
-                    .IsUnique();
 
                 entity.Property(e => e.BookId).HasColumnName("bookID");
 
@@ -54,17 +52,23 @@ namespace kupca4.DB
                     .HasMaxLength(2000)
                     .HasColumnName("description");
 
-                entity.Property(e => e.Filepath)
-                    .IsRequired()
-                    .HasMaxLength(1000)
-                    .HasColumnName("filepath");
+                entity.Property(e => e.GenreId).HasColumnName("genreID")
+                    .IsRequired();
 
-                entity.Property(e => e.GenreId).HasColumnName("genreID");
+                entity.Property(e => e.AuthorName)
+                    .HasMaxLength(255)
+                    .HasColumnName("authorName")
+                    .IsRequired();
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.Books)
                     .HasForeignKey(d => d.GenreId)
                     .HasConstraintName("FK__Books__genreID__02FC7413");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Books)
+                    .HasForeignKey(d => d.AuthorName)
+                    .HasConstraintName("FK__Books__AuthorName__02FC7413");
             });
 
             modelBuilder.Entity<Genre>(entity =>

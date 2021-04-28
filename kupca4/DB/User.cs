@@ -35,5 +35,6 @@ namespace kupca4.DB
         }
 
         public virtual ICollection<SavedBook> SavedBooks { get; set; }
+        public virtual ICollection<Book> Books { get; set; }
     }
 }
