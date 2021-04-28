@@ -67,6 +67,7 @@
                          FontSize="18" Grid.ColumnSpan="2" >
                     </TextBox>
                     <ComboBox materialDesign:HintAssist.Hint="Жанр"
+                              ItemsSource="{Binding genres, Source={x:Type vm:BookUploadViewModel}}"
                                   Margin="20 10 20 10"
                                   MaxHeight="60"
                                   MaxWidth="400"
@@ -75,18 +76,19 @@
                     </ComboBox>
                     <Button Foreground="#F2F1EF" Margin="0 25 0 0" FontSize="14" Width="120" Content="Загрузить"/>
                     <TextBox 
-                         VerticalAlignment="Top"
-                         HorizontalAlignment="Stretch"
-                         TextWrapping="Wrap"
-                         Height="30"
-                         Margin="20 50 20 10"
-                         MaxHeight="160"
-                         MaxWidth="400"
-                         materialDesign:HintAssist.Hint="Новый жанр"
-                         materialDesign:HintAssist.Foreground="#696969"
-                         FontSize="18" Grid.ColumnSpan="2" >
+                        Text="{Binding newGenre}"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Stretch"
+                        TextWrapping="Wrap"
+                        Height="30"
+                        Margin="20 50 20 10"
+                        MaxHeight="160"
+                        MaxWidth="400"
+                        materialDesign:HintAssist.Hint="Новый жанр"
+                        materialDesign:HintAssist.Foreground="#696969"
+                        FontSize="18" Grid.ColumnSpan="2" >
                     </TextBox>
-                    <Button Foreground="#F2F1EF" FontSize="14" Width="137" Content="Добавить жанр"/>
+                    <Button Foreground="#F2F1EF" FontSize="14" Width="137" Content="Добавить жанр" Command="{Binding GenreAdd}"/>
                 </StackPanel>
             </Grid>
         </Grid>

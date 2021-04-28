@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using kupca4.DB;
 using kupca4.Helpers.Commands;
@@ -12,7 +11,7 @@ namespace kupca4.ViewModels
     {
         #region private fields
 
-        private KP_LibraryContext context = new KP_LibraryContext();
+        private readonly KP_LibraryContext context = new KP_LibraryContext();
         private string _name;
         private string _surname;
         private string _registerUsername;
