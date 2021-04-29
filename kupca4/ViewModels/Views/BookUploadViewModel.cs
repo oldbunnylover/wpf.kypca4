@@ -8,6 +8,7 @@ using System.Windows.Media.Imaging;
 using System;
 using Microsoft.Win32;
 using System.Windows;
+using System.IO;
 
 namespace kupca4.ViewModels.Views
 {
@@ -121,6 +122,10 @@ namespace kupca4.ViewModels.Views
             var book = new Book(title, description, selectedGenre.GenreId, user.Username);
             context.Books.Add(book);
             context.SaveChanges();
+            Directory.CreateDirectory("books");
+            Directory.CreateDirectory($"books/{book.BookId}");
+            File.Copy(_imgPath, $"books/{book.BookId}/cover.jpg", true);
+            File.Copy(_pdfPath, $"books/{book.BookId}/book.pdf", true);
         }
 
         public ICommand SelectImagePathCommand { get; }

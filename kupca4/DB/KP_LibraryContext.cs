@@ -42,6 +42,10 @@ namespace kupca4.DB
                     .HasColumnName("applyed")
                     .HasDefaultValueSql("((0))");
 
+                entity.Property(e => e.Visible)
+                    .HasColumnName("visible")
+                    .HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.Bookname)
                     .IsRequired()
                     .HasMaxLength(255)
