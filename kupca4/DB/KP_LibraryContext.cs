@@ -56,6 +56,10 @@ namespace kupca4.DB
                     .HasMaxLength(2000)
                     .HasColumnName("description");
 
+                entity.Property(e => e.Rate)
+                    .HasColumnName("rate")
+                    .HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.GenreId).HasColumnName("genreID")
                     .IsRequired();
 

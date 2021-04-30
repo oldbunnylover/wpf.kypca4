@@ -16,9 +16,9 @@ namespace kupca4.Views
     /// <summary>
     /// Логика взаимодействия для BookUpload.xaml
     /// </summary>
-    public partial class AllBooks : UserControl
+    public partial class BookUpload : UserControl
     {
-        public AllBooks()
+        public BookUpload()
         {
             InitializeComponent();
         }
