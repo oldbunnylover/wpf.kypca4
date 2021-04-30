@@ -54,6 +54,11 @@
              VerticalOffset="10"/>
                     </ListViewItem.ToolTip>
                     <Image Source="Styles/img/book.ico"  Width="40" Height="40"/>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding SwitchViewCommand}" CommandParameter="AllBooks"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </ListViewItem>
                 <ListViewItem Foreground="#F2F1EF" Margin="0,0,0,25">
                     <ListViewItem.ToolTip>
@@ -61,6 +66,11 @@
              VerticalOffset="10"/>
                     </ListViewItem.ToolTip>
                     <materialDesign:PackIcon Kind="LibraryShelves" Width="40" Height="40"/>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding SwitchViewCommand}" CommandParameter="MyBooks"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </ListViewItem>
                 <ListViewItem Margin="0,0,0,25" Foreground="#F2F1EF">
                     <ListViewItem.ToolTip>

@@ -27,6 +27,12 @@
             <DataTemplate DataType="{x:Type vm:BookUploadViewModel}">
                 <views:BookUpload/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:AllBooksViewModel}">
+                <views:AllBooks/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:MyBooksViewModel}">
+                <views:MyBooks/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

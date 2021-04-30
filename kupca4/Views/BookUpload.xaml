@@ -14,7 +14,7 @@
         <materialDesign:DialogHost.DialogContent>
             <Border Height="Auto" Width="Auto">
                 <StackPanel Margin="16">
-                    <TextBlock Text="{Binding selectedGenre}"/>
+                    <TextBlock Text="{Binding dialogText}"/>
                     <Button Margin="0 10 0 0" Style="{StaticResource MaterialDesignFlatAccentButton}"
                                 Content="Закрыть" Foreground="#6E304B" Width="90" Height="30" Command="{Binding CloseDialogCommand}"/>
                 </StackPanel>
