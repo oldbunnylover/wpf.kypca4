@@ -7,11 +7,13 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:convert="clr-namespace:kupca4.Helpers.Converters"
              mc:Ignorable="d" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DataContext="{d:DesignInstance Type=vm:AllBooksViewModel}"
              d:DesignHeight="585" d:DesignWidth="864"
              d:Background="#F2F1EF">
     <UserControl.Resources>
         <convert:IDtoImageConverter x:Key="IDtoImageConverter"/>
+        <convert:NicktoFullName x:Key="NicktoFullName"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -28,20 +30,39 @@
                       />
         </StackPanel>
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Visible" PreviewMouseWheel="Scroll">
-            <ListBox ItemsSource="{Binding booksList}">
+            <ListBox ItemsSource="{Binding booksList}" Name="ListBoxBook">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="20 20 20 0" Height="170">
+                        <Grid Margin="20 20 20 0" Height="170" Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="170"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
+                            <Border Grid.ColumnSpan="2" BorderBrush="#E7E4E3" BorderThickness="1" CornerRadius="10">
+                                <Border.Effect>
+                                    <DropShadowEffect />
+                                </Border.Effect>
+                            </Border>
                             <Rectangle Grid.ColumnSpan="2" RadiusX="15" RadiusY="15" Fill="#E7E4E3"/>
-                            <Image Source="{Binding BookId, Converter={StaticResource IDtoImageConverter}}" Margin="10"/>
+                            <Image Source="{Binding BookId, Converter={StaticResource IDtoImageConverter}}" Margin="18 10 18 10" Cursor="Hand">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                        <i:InvokeCommandAction Command="{Binding ElementName=ListBoxBook, Path=DataContext.SwitchViewCommand}"
+                                                                   CommandParameter="{Binding BookId}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Image>
                             <StackPanel Grid.Column="1">
-                                <TextBlock Text="{Binding Bookname}" FontSize="17" Margin="5 5 0 0"/>
-                                <TextBlock Text="{Binding AuthorName}" FontSize="13" Margin="5 0 0 0"/>
-                                <TextBlock TextWrapping="Wrap" FontSize="10" Margin="5 8 10 5" Text="{Binding Description}" />
+                                <TextBlock Text="{Binding Bookname}" FontSize="20" Margin="5 8 0 0" HorizontalAlignment="Left" Cursor="Hand">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                            <i:InvokeCommandAction Command="{Binding ElementName=ListBoxBook, Path=DataContext.SwitchViewCommand}"
+                                                                   CommandParameter="{Binding BookId}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBlock>
+                                <TextBlock Text="{Binding AuthorName, Converter={StaticResource NicktoFullName}}" FontSize="12" Foreground="#6E304B" Margin="5 0 0 5"/>
+                                <TextBlock TextWrapping="Wrap" FontSize="10" Margin="5 7 10 5" Text="{Binding Description}" Height="106" />
                             </StackPanel>
                         </Grid>
                     </DataTemplate>

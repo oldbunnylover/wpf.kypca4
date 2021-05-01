@@ -68,7 +68,7 @@ namespace kupca4.ViewModels
                     selectedVM = new BookUploadViewModel(user);
                     break;
                 case "AllBooks":
-                    selectedVM = new AllBooksViewModel(user);
+                    selectedVM = new AllBooksViewModel(user, this);
                     break;
                 case "MyBooks":
                     selectedVM = new MyBooksViewModel(user);
