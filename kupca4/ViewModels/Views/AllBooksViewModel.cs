@@ -1,5 +1,6 @@
 ﻿using kupca4.DB;
 using kupca4.ViewModels.Base;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -13,6 +14,7 @@ namespace kupca4.ViewModels.Views
         private readonly KP_LibraryContext context = new KP_LibraryContext();
         private readonly List<string> _sorting = new List<string>{ "по новизне", "по алфавиту", "по популярности" };
         private string _sortingSelected;
+        private readonly string _myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         private ObservableCollection<Book> _booksList = new ObservableCollection<Book>((new KP_LibraryContext()).Books);
 
         #endregion
@@ -34,6 +36,7 @@ namespace kupca4.ViewModels.Views
         {
             get => _booksList;
         }
+
 
         #endregion
 
