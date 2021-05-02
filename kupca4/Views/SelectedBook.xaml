@@ -11,8 +11,8 @@
              d:DesignHeight="585" d:DesignWidth="864">
     <UserControl.Resources>
         <convert:IDtoImageConverter x:Key="IDtoImageConverter"/>
-        <convert:NicktoFullName x:Key="NicktoFullName"/>
-        <convert:GenreIDtoGenreName x:Key="GenreIDtoGenreName"/>
+        <convert:NicktoFullNameConverter x:Key="NicktoFullNameConverter"/>
+        <convert:GenreIDtoGenreNameConverter x:Key="GenreIDtoGenreNameConverter"/>
     </UserControl.Resources>
     <Grid Background="#F2F1EF">
         <Grid.RowDefinitions>
@@ -20,7 +20,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Rectangle Grid.Row="0" Grid.ColumnSpan="6" Fill="#BFA37C82"></Rectangle>
-        <TextBlock Text="{Binding selectedBook.Bookname}" Grid.ColumnSpan="2" FontSize="27" TextAlignment="Left" VerticalAlignment="Center" Foreground="#F2F1EF" Margin="20,0,0,0" />
+        <StackPanel Orientation="Horizontal">
+            <Button Padding="1" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" Command="{Binding SwitchViewCommand}">
+                <materialDesign:PackIcon Kind="ArrowLeft" Width="30" Height="30" />
+            </Button>
+            <TextBlock Text="{Binding selectedBook.Bookname}" Grid.ColumnSpan="2" FontSize="27" TextAlignment="Left" VerticalAlignment="Center" Foreground="#F2F1EF" Margin="10,0,0,0"/>
+        </StackPanel>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="300"/>
@@ -33,9 +38,9 @@
             <Image Source="{Binding selectedBook.BookId, Converter={StaticResource IDtoImageConverter}}" Margin="50 30 0 0" HorizontalAlignment="Left"/>
             <StackPanel Grid.Column="1" Margin="15 30 0 0">
                 <TextBlock Text="{Binding selectedBook.Bookname}" FontSize="30"/>
-                <TextBlock Text="{Binding selectedBook.AuthorName, Converter={StaticResource NicktoFullName}}" FontSize="20" Margin="0 7 0 0" Foreground="#6E304B"/>
+                <TextBlock Text="{Binding selectedBook.AuthorName, Converter={StaticResource NicktoFullNameConverter}}" FontSize="20" Margin="0 7 0 0" Foreground="#6E304B"/>
                 <TextBlock Text="Жанр:" Margin="0 25 0 0" FontSize="18"/>
-                <TextBlock Text="{Binding selectedBook.GenreId, Converter={StaticResource GenreIDtoGenreName}}" Margin="0 5 0 0" FontSize="18" Foreground="#6E304B"/>
+                <TextBlock Text="{Binding selectedBook.GenreId, Converter={StaticResource GenreIDtoGenreNameConverter}}" Margin="0 5 0 0" FontSize="18" Foreground="#6E304B"/>
                 <TextBlock Text="{Binding Path=selectedBook.Rate,StringFormat='Оценка: \{0:0.00\}'}" Margin="0 15 0 0" FontSize="18"/>
                 <Button Height="46" Width="200" HorizontalAlignment="Left" Margin="0 24 0 0" Content="Читать" FontSize="20" VerticalAlignment="Bottom"/>
             </StackPanel>

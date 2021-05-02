@@ -48,7 +48,7 @@ namespace kupca4.ViewModels.Views
         private bool CanSwitchViewCommandExecute(object p) => true;
         private void OnSwitchViewCommandExecuted(object p)
         {
-            parentVM.selectedVM = new SelectedBookViewModel(user, (int)p);
+            parentVM.selectedVM = new SelectedBookViewModel(user, (int)p, parentVM);
         }
 
         #endregion

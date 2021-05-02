@@ -13,7 +13,7 @@
              d:Background="#F2F1EF">
     <UserControl.Resources>
         <convert:IDtoImageConverter x:Key="IDtoImageConverter"/>
-        <convert:NicktoFullName x:Key="NicktoFullName"/>
+        <convert:NicktoFullNameConverter x:Key="NicktoFullNameConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -61,7 +61,7 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TextBlock>
-                                <TextBlock Text="{Binding AuthorName, Converter={StaticResource NicktoFullName}}" FontSize="12" Foreground="#6E304B" Margin="5 0 0 5"/>
+                                <TextBlock Text="{Binding AuthorName, Converter={StaticResource NicktoFullNameConverter}}" FontSize="12" Foreground="#6E304B" Margin="5 0 0 5"/>
                                 <TextBlock TextWrapping="Wrap" FontSize="10" Margin="5 7 10 5" Text="{Binding Description}" Height="106" />
                             </StackPanel>
                         </Grid>
