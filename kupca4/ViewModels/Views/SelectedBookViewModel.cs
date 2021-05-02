@@ -2,6 +2,8 @@
 using kupca4.Helpers.Commands;
 using kupca4.ViewModels.Base;
 using System.Windows.Input;
+using System.Linq;
+using System.Windows;
 
 namespace kupca4.ViewModels.Views
 {
@@ -36,10 +38,11 @@ namespace kupca4.ViewModels.Views
         }
 
         public ICommand ToFavoritesCommand { get; }
-        private bool CanToFavoritesCommandExecute(object p) => true; //не тру
+        private bool CanToFavoritesCommandExecute(object p) => context.SavedBooks.FirstOrDefault(s => s.BookId == _selectedBook.BookId && s.Username == user.Username) == null;
         private void OnToFavoritesCommandExecuted(object p)
         {
-            //user.SavedBooks.Add(_selectedBook);
+            context.SavedBooks.Add(new SavedBook { BookId = selectedBook.BookId, Username = user.Username });
+            context.SaveChanges();
         }
 
         #endregion

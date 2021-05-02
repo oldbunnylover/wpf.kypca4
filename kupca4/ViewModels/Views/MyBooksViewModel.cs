@@ -1,10 +1,9 @@
 ﻿using kupca4.DB;
 using kupca4.Helpers.Commands;
 using kupca4.ViewModels.Base;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Input;
 
 namespace kupca4.ViewModels.Views
 {
@@ -16,6 +15,7 @@ namespace kupca4.ViewModels.Views
         private readonly KP_LibraryContext context = new KP_LibraryContext();
 
         private ObservableCollection<Book> _uploadedBooksList;
+        private ObservableCollection<Book> _likedBooksList = new ObservableCollection<Book>();
 
         #endregion
 
@@ -26,6 +26,11 @@ namespace kupca4.ViewModels.Views
             get => _uploadedBooksList;
         }
 
+        public ObservableCollection<Book> likedBooksList
+        {
+            get => _likedBooksList;
+        }
+
         #endregion
 
         public MyBooksViewModel(User user)
@@ -33,6 +38,8 @@ namespace kupca4.ViewModels.Views
             this.user = user;
 
             _uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
+            _likedBooksList = new ObservableCollection<Book>(context.Books.Where(b => context.SavedBooks.Where(s => s.Username == user.Username).Select(s => s.BookId).Contains(b.BookId)));
+            
         }
     }
 }

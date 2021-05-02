@@ -84,12 +84,12 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListViewItem>
-                <ListViewItem Margin="0,0,0,25" Foreground="#F2F1EF" Visibility="Hidden" Cursor="Hand">
+                <ListViewItem Margin="0,0,0,25" Foreground="#F2F1EF" Cursor="Hand">
                     <ListViewItem.ToolTip>
                         <ToolTip Placement="Left" Content="Панель управления"  HorizontalOffset="5" 
              VerticalOffset="10"/>
                     </ListViewItem.ToolTip>
-                    <materialDesign:PackIcon Kind="Tools" Width="40" Height="40"/>
+                    <materialDesign:PackIcon Kind="Account" Width="40" Height="40"/>
                 </ListViewItem>
                 <ListViewItem Foreground="#F2F1EF">
                     <ListViewItem.ToolTip>

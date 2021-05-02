@@ -27,14 +27,14 @@ namespace kupca4.DB
             this.Password = getHash(password);
         }
 
+        public virtual ICollection<SavedBook> SavedBooks { get; set; }
+        public virtual ICollection<Book> Books { get; set; }
+
         public static string getHash(string password)
         {
             var md5 = MD5.Create();
             var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(password));
             return Convert.ToBase64String(hash);
         }
-
-        public virtual ICollection<SavedBook> SavedBooks { get; set; }
-        public virtual ICollection<Book> Books { get; set; }
     }
 }
