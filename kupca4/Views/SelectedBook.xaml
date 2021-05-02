@@ -42,7 +42,10 @@
                 <TextBlock Text="Жанр:" Margin="0 25 0 0" FontSize="18"/>
                 <TextBlock Text="{Binding selectedBook.GenreId, Converter={StaticResource GenreIDtoGenreNameConverter}}" Margin="0 5 0 0" FontSize="18" Foreground="#6E304B"/>
                 <TextBlock Text="{Binding Path=selectedBook.Rate,StringFormat='Оценка: \{0:0.00\}'}" Margin="0 15 0 0" FontSize="18"/>
-                <Button Height="46" Width="200" HorizontalAlignment="Left" Margin="0 24 0 0" Content="Читать" FontSize="20" VerticalAlignment="Bottom"/>
+                <StackPanel HorizontalAlignment="Left" Margin="0 30 0 0" VerticalAlignment="Bottom" Orientation="Horizontal">
+                    <Button Height="46" Width="200" Content="Читать" FontSize="20" />
+                    <Button Height="46" Width="200" Content="В избранное" FontSize="20" Margin="40 0 0 0" Command="{Binding ToFavoritesCommand}"/>
+                </StackPanel>
             </StackPanel>
             <ScrollViewer  Grid.ColumnSpan="2" Grid.Row="1">
                 <TextBlock TextWrapping="Wrap" Margin="50,18,50,4" FontSize="18" Text="{Binding selectedBook.Description}"/>

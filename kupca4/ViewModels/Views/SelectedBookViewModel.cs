@@ -35,6 +35,13 @@ namespace kupca4.ViewModels.Views
             mainWindowVM.selectedVM = new AllBooksViewModel(user, mainWindowVM);
         }
 
+        public ICommand ToFavoritesCommand { get; }
+        private bool CanToFavoritesCommandExecute(object p) => true; //не тру
+        private void OnToFavoritesCommandExecuted(object p)
+        {
+            //user.SavedBooks.Add(_selectedBook);
+        }
+
         #endregion
 
         public SelectedBookViewModel(User user, int bookID, MainWindowViewModel vm)
@@ -45,6 +52,7 @@ namespace kupca4.ViewModels.Views
             _selectedBook = context.Books.Find(bookID);
 
             SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted, CanSwitchViewCommandExecute);
+            ToFavoritesCommand = new LambdaCommand(OnToFavoritesCommandExecuted, CanToFavoritesCommandExecute);
         }
     }
 }
