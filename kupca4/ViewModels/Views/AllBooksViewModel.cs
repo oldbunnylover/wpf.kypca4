@@ -4,6 +4,7 @@ using kupca4.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace kupca4.ViewModels.Views
@@ -13,11 +14,12 @@ namespace kupca4.ViewModels.Views
         #region private fields
 
         private readonly User user;
+        private readonly KP_LibraryContext context = new KP_LibraryContext();
         private readonly List<string> _sorting = new List<string>{ "по новизне", "по алфавиту", "по популярности" };
         private readonly MainWindowViewModel parentVM;
 
         private string _sortingSelected;
-        private ObservableCollection<Book> _booksList = new ObservableCollection<Book>((new KP_LibraryContext()).Books);
+        private ObservableCollection<Book> _booksList;
 
         #endregion
 
@@ -31,12 +33,28 @@ namespace kupca4.ViewModels.Views
         public string sortingSelected
         {
             get => _sortingSelected;
-            set => Set(ref _sortingSelected, value);
+            set
+            {
+                Set(ref _sortingSelected, value);
+                switch (sortingSelected)
+                {
+                    case "по новизне":
+                        booksList = new ObservableCollection<Book>(context.Books.OrderByDescending(b => b.BookId));
+                        break;
+                    case "по алфавиту":
+                        booksList = new ObservableCollection<Book>(context.Books.OrderBy(b => b.Bookname));
+                        break;
+                    case "по популярности":
+                        booksList = new ObservableCollection<Book>(context.Books.OrderBy(b => b.Rate));
+                        break;
+                }
+            }
         }
 
         public ObservableCollection<Book> booksList
         {
             get => _booksList;
+            set => Set(ref _booksList, value);
         }
 
 
@@ -45,7 +63,6 @@ namespace kupca4.ViewModels.Views
         #region commands
 
         public ICommand SwitchViewCommand { get; }
-        private bool CanSwitchViewCommandExecute(object p) => true;
         private void OnSwitchViewCommandExecuted(object p)
         {
             parentVM.selectedVM = new SelectedBookViewModel(user, (int)p, parentVM);
@@ -59,9 +76,9 @@ namespace kupca4.ViewModels.Views
             this.user = user;
             parentVM = vm;
 
-            _sortingSelected = _sorting[0];
+            sortingSelected = sorting[0];
 
-            SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted, CanSwitchViewCommandExecute);
+            SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted);
         }
     }
 }
