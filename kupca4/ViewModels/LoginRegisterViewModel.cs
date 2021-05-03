@@ -95,7 +95,7 @@ namespace kupca4.ViewModels
                 User user = new User(name, surname, registerUsername, registerPassword);
                 context.Users.Add(user);
                 context.SaveChanges();
-                var MainWindowViewModel = new MainWindowViewModel(user);
+                var MainWindowViewModel = new MainWindowViewModel(user, "AllBooks");
                 var MainWindow = new MainWindow
                 {
                     DataContext = MainWindowViewModel
@@ -118,7 +118,7 @@ namespace kupca4.ViewModels
             if (context.Users.FirstOrDefault(u => u.Username == loginUsername && u.Password == User.getHash(loginPassword)) != null)
             {
                 User user = context.Users.FirstOrDefault(u => u.Username == loginUsername);
-                var MainWindowViewModel = new MainWindowViewModel(user);
+                var MainWindowViewModel = new MainWindowViewModel(user, "MyBooks");
                 var MainWindow = new MainWindow
                 {
                     DataContext = MainWindowViewModel

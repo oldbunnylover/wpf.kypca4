@@ -78,7 +78,7 @@ namespace kupca4.ViewModels
 
         #endregion
 
-        public MainWindowViewModel(User user)
+        public MainWindowViewModel(User user, string view)
         {
             this.user = user;
 
@@ -86,6 +86,11 @@ namespace kupca4.ViewModels
             WindowMaximizeCommand = new LambdaCommand(OnWindowMaximizeCommandExecuted, CanWindowMaximizeCommandExecute);
             SwitchUserCommand = new LambdaCommand(OnSwitchUserCommandExecuted, CanSwitchUserCommandExecute);
             SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted, CanSwitchViewCommandExecute);
+
+            if (view == "MyBooks")
+                selectedVM = new MyBooksViewModel(user);
+            else
+                selectedVM = new AllBooksViewModel(user, this);
         }
     }
 }
