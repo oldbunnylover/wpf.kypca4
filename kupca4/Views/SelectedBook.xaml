@@ -28,7 +28,7 @@
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="300"/>
+                <RowDefinition Height="320"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -37,12 +37,12 @@
             </Grid.ColumnDefinitions>
             <Image Source="{Binding selectedBook.BookId, Converter={StaticResource IDtoImageConverter}}" Margin="50 30 0 0" HorizontalAlignment="Left"/>
             <StackPanel Grid.Column="1" Margin="15 30 0 0">
-                <TextBlock Text="{Binding selectedBook.Bookname}" FontSize="30"/>
+                <TextBlock Text="{Binding selectedBook.Bookname}" d:Text="afasfasfasfsfasfasfasfasfasfasfasfaasfasfsafasfasfasf" TextWrapping="Wrap" FontSize="30" MaxHeight="80"/>
                 <TextBlock Text="{Binding selectedBook.AuthorName, Converter={StaticResource NicktoFullNameConverter}}" FontSize="20" Margin="0 7 0 0" Foreground="#6E304B"/>
-                <TextBlock Text="Жанр:" Margin="0 25 0 0" FontSize="18"/>
+                <TextBlock Text="Жанр:" Margin="0 15 0 0" FontSize="18"/>
                 <TextBlock Text="{Binding selectedBook.GenreId, Converter={StaticResource GenreIDtoGenreNameConverter}}" Margin="0 5 0 0" FontSize="18" Foreground="#6E304B"/>
                 <TextBlock Text="{Binding Path=selectedBook.Rate,StringFormat='Оценка: \{0:0.00\}'}" Margin="0 15 0 0" FontSize="18"/>
-                <StackPanel HorizontalAlignment="Left" Margin="0 30 0 0" VerticalAlignment="Bottom" Orientation="Horizontal">
+                <StackPanel HorizontalAlignment="Left" Margin="0 25 0 0" VerticalAlignment="Bottom" Orientation="Horizontal">
                     <Button Height="46" Width="200" Content="Читать" FontSize="20" Command="{Binding ReadBookCommand}"/>
                     <Button Height="46" Width="200" Content="В избранное" FontSize="20" Margin="40 0 0 0" Command="{Binding ToFavoritesCommand}"/>
                 </StackPanel>

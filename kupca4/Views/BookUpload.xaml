@@ -93,7 +93,7 @@
                         </ComboBox>
                         <Button Foreground="#F2F1EF" Margin="0 25 0 0" FontSize="14" Width="120" Content="Загрузить" Command="{Binding BookUploadCommand}"/>
                         <TextBox 
-                            Text="{Binding newGenre}"
+                            Text="{Binding newGenre, UpdateSourceTrigger=PropertyChanged}"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Stretch"
                             TextWrapping="Wrap"

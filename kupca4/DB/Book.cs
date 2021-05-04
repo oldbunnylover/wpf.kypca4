@@ -15,7 +15,7 @@ namespace kupca4.DB
         public string Bookname { get; set; }
         public string Description { get; set; }
         public bool? Applyed { get; set; }
-        public bool? Visible { get; set; }
+        public bool? Hidden { get; set; }
         public double? Rate { get; set; }
         public int GenreId { get; set; }
         public string AuthorName { get; set; }

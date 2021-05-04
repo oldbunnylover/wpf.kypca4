@@ -108,7 +108,7 @@ namespace kupca4.ViewModels.Views
         #region commands
 
         public ICommand GenreAddCommand { get; }
-        private bool CanGenreAddCommandExecute(object p) => true;
+        private bool CanGenreAddCommandExecute(object p) => newGenre?.Length > 0;
         private void OnGenreAddCommandExecuted(object p)
         {
             if (context.Genres.FirstOrDefault(g => g.Genrename == newGenre) == null)
@@ -126,7 +126,6 @@ namespace kupca4.ViewModels.Views
         }
 
         public ICommand CloseDialogCommand { get; }
-        private bool CanCloseDialogCommandExecute(object p) => true;
         private void OnCloseDialogCommandExecuted(object p) => dialog = false;
 
         public ICommand BookUploadCommand { get; }
@@ -166,7 +165,6 @@ namespace kupca4.ViewModels.Views
         }
 
         public ICommand SelectImagePathCommand { get; }
-        private bool CanSelectImagePathCommandExecute(object p) => true;
         private void OnSelectImagePathCommandExecuted(object p)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -179,7 +177,6 @@ namespace kupca4.ViewModels.Views
         }
 
         public ICommand SelectPdfPathCommand { get; }
-        private bool CanSelectPdfPathCommandExecute(object p) => true;
         private void OnSelectPdfPathCommandExecuted(object p)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -216,10 +213,10 @@ namespace kupca4.ViewModels.Views
             }
 
             GenreAddCommand = new LambdaCommand(OnGenreAddCommandExecuted, CanGenreAddCommandExecute);
-            CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted, CanCloseDialogCommandExecute);
+            CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted);
             BookUploadCommand = new LambdaCommand(OnBookUploadCommandExecuted, CanBookUploadCommandExecute);
-            SelectImagePathCommand = new LambdaCommand(OnSelectImagePathCommandExecuted, CanSelectImagePathCommandExecute);
-            SelectPdfPathCommand = new LambdaCommand(OnSelectPdfPathCommandExecuted, CanSelectPdfPathCommandExecute);
+            SelectImagePathCommand = new LambdaCommand(OnSelectImagePathCommandExecuted);
+            SelectPdfPathCommand = new LambdaCommand(OnSelectPdfPathCommandExecuted);
         }
     }
 }

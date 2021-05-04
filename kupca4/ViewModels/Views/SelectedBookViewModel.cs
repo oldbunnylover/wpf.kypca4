@@ -13,6 +13,8 @@ namespace kupca4.ViewModels.Views
         private readonly User user;
         private readonly KP_LibraryContext context = new KP_LibraryContext();
         private readonly MainWindowViewModel mainWindowVM;
+        private readonly bool fromMyBooks;
+        private string savedSorting;
 
         private Book _selectedBook;
 
@@ -33,7 +35,14 @@ namespace kupca4.ViewModels.Views
         private bool CanSwitchViewCommandExecute(object p) => true;
         private void OnSwitchViewCommandExecuted(object p)
         {
-            mainWindowVM.selectedVM = new AllBooksViewModel(user, mainWindowVM);
+            if (fromMyBooks)
+            {
+                mainWindowVM.selectedVM = new MyBooksViewModel(user, mainWindowVM);
+            }
+            else
+            {
+                mainWindowVM.selectedVM = new AllBooksViewModel(user, mainWindowVM, savedSorting);
+            }
         } 
 
         public ICommand ToFavoritesCommand { get; }
@@ -58,10 +67,12 @@ namespace kupca4.ViewModels.Views
 
         #endregion
 
-        public SelectedBookViewModel(User user, int bookID, MainWindowViewModel vm)
+        public SelectedBookViewModel(User user, int bookID, MainWindowViewModel vm, bool fromMyBooks = false, string savedSorting = "по новизне")
         {
             this.user = user;
             mainWindowVM = vm;
+            this.fromMyBooks = fromMyBooks;
+            this.savedSorting = savedSorting;
 
             _selectedBook = context.Books.Find(bookID);
 

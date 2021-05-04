@@ -42,9 +42,9 @@ namespace kupca4.DB
                     .HasColumnName("applyed")
                     .HasDefaultValueSql("((0))");
 
-                entity.Property(e => e.Visible)
-                    .HasColumnName("visible")
-                    .HasDefaultValueSql("((1))");
+                entity.Property(e => e.Hidden)
+                    .HasColumnName("hidden")
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Bookname)
                     .IsRequired()
@@ -100,6 +100,7 @@ namespace kupca4.DB
                     .HasColumnName("username");
 
                 entity.Property(e => e.BookId).HasColumnName("bookID");
+                entity.Property(e => e.UserRate).HasColumnName("userRate").HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.Book)
                     .WithMany(p => p.SavedBooks)

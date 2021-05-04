@@ -53,12 +53,12 @@
         <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Content="Зарегистрироваться" 
                 Margin="76,311,76,32" Grid.Column="1" Command="{Binding Path=RegisterCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:LoginRegister}}"
                 materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding loading}" materialDesign:ButtonProgressAssist.IsIndeterminate="True"/>
-        <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Имя" 
-                 Margin="56,94,56,238.211" Background="#B4F2F1EF" Grid.Column="1" Text="{Binding name}"/>
+            <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Псевдоним" 
+                 Margin="56,94,56,238.211" Background="#B4F2F1EF" Grid.Column="1" Text="{Binding registerUsername}"/>
         <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Фамилия" 
                  Margin="56,141.789,56,190.422" Background="#B4F2F1EF" Grid.Column="1" Text="{Binding surname}"/>
-        <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Псевдоним" 
-                 Margin="56,189.578,56,142.633" Background="#B4F2F1EF" Grid.Column="1" Text="{Binding registerUsername}"/>
+            <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Имя" 
+                 Margin="56,189.578,56,142.633" Background="#B4F2F1EF" Grid.Column="1" Text="{Binding name}"/>
             <PasswordBox x:Name="passBox" Style="{StaticResource MaterialDesignFilledPasswordBox}" materialDesign:HintAssist.Hint="Пароль" 
                      Margin="56,238.8,56,93.411" Background="#B2F2F1EF" Grid.Column="1">
                 <i:Interaction.Behaviors>

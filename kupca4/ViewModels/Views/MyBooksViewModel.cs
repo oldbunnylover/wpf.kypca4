@@ -26,6 +26,7 @@ namespace kupca4.ViewModels.Views
         public ObservableCollection<Book> uploadedBooksList
         {
             get => _uploadedBooksList;
+            set => Set(ref _uploadedBooksList, value);
         }
 
         public ObservableCollection<Book> likedBooksList
@@ -42,6 +43,28 @@ namespace kupca4.ViewModels.Views
             MainWindowVM.selectedVM = new BookUploadViewModel(user, (int)p);
         }
 
+        public ICommand HideBookCommand { get; }
+        private void OnHideBookCommandExecuted(object p)
+        {
+            context.Books.Find((int)p).Hidden = true;
+            context.SaveChanges();
+            uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
+        }
+
+        public ICommand ShowBookCommand { get; }
+        private void OnShowBookCommandExecuted(object p)
+        {
+            context.Books.Find((int)p).Hidden = false;
+            context.SaveChanges();
+            uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
+        }
+
+        public ICommand SwitchViewCommand { get; }
+        private void OnSwitchViewCommandExecuted(object p)
+        {
+            MainWindowVM.selectedVM = new SelectedBookViewModel(user, (int)p, MainWindowVM, true);
+        }
+
         #endregion
 
         public MyBooksViewModel(User user, MainWindowViewModel vm)
@@ -52,6 +75,9 @@ namespace kupca4.ViewModels.Views
             _likedBooksList = new ObservableCollection<Book>(context.Books.Where(b => context.SavedBooks.Where(s => s.Username == user.Username).Select(s => s.BookId).Contains(b.BookId)));
             
             EditBookCommand = new LambdaCommand(OnEditBookCommandExecuted);
+            HideBookCommand = new LambdaCommand(OnHideBookCommandExecuted);
+            ShowBookCommand = new LambdaCommand(OnShowBookCommandExecuted);
+            SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted);
         }
     }
 }
