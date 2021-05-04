@@ -8,6 +8,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:kupca4"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        Icon="/Styles/img/favicon.ico"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" SourceInitialized="Window_SourceInitialized"
         d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"

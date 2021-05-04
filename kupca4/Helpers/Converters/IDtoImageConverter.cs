@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace kupca4.Helpers.Converters
 {
@@ -10,7 +11,13 @@ namespace kupca4.Helpers.Converters
         {
             if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + $@"\DuckLibrary\books\{(int)value}\cover.jpg"))
             {
-                return Environment.GetFolderPath(Environment.SpecialFolder.Personal) + $@"\DuckLibrary\books\{(int)value}\cover.jpg";
+                BitmapImage imgTemp = new BitmapImage();
+                imgTemp.BeginInit();
+                imgTemp.CacheOption = BitmapCacheOption.OnLoad;
+                imgTemp.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                imgTemp.UriSource = new Uri(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + $@"\DuckLibrary\books\{(int)value}\cover.jpg");
+                imgTemp.EndInit();
+                return imgTemp;
             } 
             else
             {

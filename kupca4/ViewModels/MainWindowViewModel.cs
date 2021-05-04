@@ -71,7 +71,7 @@ namespace kupca4.ViewModels
                     selectedVM = new AllBooksViewModel(user, this);
                     break;
                 case "MyBooks":
-                    selectedVM = new MyBooksViewModel(user);
+                    selectedVM = new MyBooksViewModel(user, this);
                     break;
             }
         }
@@ -88,7 +88,7 @@ namespace kupca4.ViewModels
             SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted, CanSwitchViewCommandExecute);
 
             if (view == "MyBooks")
-                selectedVM = new MyBooksViewModel(user);
+                selectedVM = new MyBooksViewModel(user, this);
             else
                 selectedVM = new AllBooksViewModel(user, this);
         }

@@ -20,6 +20,7 @@ namespace kupca4.ViewModels.Views
         private readonly KP_LibraryContext context = new KP_LibraryContext();
         private readonly string _myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         private readonly BitmapImage _noPhoto = new BitmapImage(new Uri("pack://application:,,,/Styles/img/noPhoto.png"));
+        private readonly Book editBook;
 
         private string _newGenre;
         private bool _dialog = false;
@@ -28,7 +29,7 @@ namespace kupca4.ViewModels.Views
         private Genre _selectedGenre;
         private string _title;
         private string _description;
-        private BitmapImage _bookPicture;
+        private BitmapImage _bookPicture = new BitmapImage();
         private string _imgPath;
         private string _pdfPath;
         private Visibility _fileCheck = Visibility.Collapsed;
@@ -133,13 +134,28 @@ namespace kupca4.ViewModels.Views
         private void OnBookUploadCommandExecuted(object p)
         {
             var book = new Book(title, description, selectedGenre.GenreId, user.Username);
-            context.Books.Add(book);
+            if (editBook == null)
+            {
+                context.Books.Add(book);
+            }
+            else
+            {
+                book.BookId = editBook.BookId;
+                editBook.Bookname = title;
+                editBook.Description = description;
+                editBook.GenreId = selectedGenre.GenreId;
+                
+            }
             context.SaveChanges();
             Directory.CreateDirectory(_myDocumentsPath + @"\DuckLibrary");
             Directory.CreateDirectory(_myDocumentsPath + @"\DuckLibrary\books");
             Directory.CreateDirectory(_myDocumentsPath  + $@"\DuckLibrary\books\{book.BookId}");
             File.Copy(_imgPath, _myDocumentsPath + $@"\DuckLibrary\books\{book.BookId}\cover.jpg", true);
-            File.Copy(_pdfPath, _myDocumentsPath + $@"\DuckLibrary\books\{book.BookId}\book.pdf", true);
+            try
+            {
+                File.Copy(_pdfPath, _myDocumentsPath + $@"\DuckLibrary\books\{book.BookId}\book.pdf", true);
+            }
+            catch { }
             RestoreForm();
         }
 
@@ -172,10 +188,27 @@ namespace kupca4.ViewModels.Views
         #endregion
 
 
-        public BookUploadViewModel(User user)
+        public BookUploadViewModel(User user, int bookID = -1)
         {
             this.user = user;
-            this.bookPicture = _noPhoto;
+            if (bookID != -1)
+            {
+                editBook = context.Books.Find(bookID);
+                _imgPath = _myDocumentsPath + $@"\DuckLibrary\books\{bookID}\cover.jpg";
+                _pdfPath = _myDocumentsPath + $@"\DuckLibrary\books\{bookID}\book.pdf";
+                _bookPicture.BeginInit();
+                _bookPicture.CacheOption = BitmapCacheOption.OnLoad;
+                _bookPicture.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                _bookPicture.UriSource = new Uri(_imgPath);
+                _bookPicture.EndInit();
+                fileCheck = Visibility.Visible;
+                title = editBook.Bookname;
+                description = editBook.Description;
+            } else
+            {
+                bookPicture = _noPhoto;
+            }
+
             GenreAddCommand = new LambdaCommand(OnGenreAddCommandExecuted, CanGenreAddCommandExecute);
             CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted, CanCloseDialogCommandExecute);
             BookUploadCommand = new LambdaCommand(OnBookUploadCommandExecuted, CanBookUploadCommandExecute);

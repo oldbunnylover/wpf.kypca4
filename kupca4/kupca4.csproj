@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="Styles\fonts\Museo Cyrl 500.otf" />
     <None Remove="Styles\img\book.ico" />
+    <None Remove="Styles\img\favicon.ico" />
     <None Remove="Styles\img\noPhoto.png" />
     <None Remove="Styles\img\write.ico" />
   </ItemGroup>
@@ -29,6 +30,7 @@
   <ItemGroup>
     <Resource Include="Styles\fonts\Museo Cyrl 500.otf" />
     <Resource Include="Styles\img\book.ico" />
+    <Resource Include="Styles\img\favicon.ico" />
     <Resource Include="Styles\img\noPhoto.png" />
     <Resource Include="Styles\img\write.ico" />
   </ItemGroup>

@@ -9,6 +9,7 @@
         xmlns:vm="clr-namespace:kupca4.ViewModels"
         xmlns:cmd="clr-namespace:kupca4.Helpers.Commands" 
         xmlns:bh="clr-namespace:kupca4.Helpers.Behaviors"
+        Icon="/Styles/img/favicon.ico"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Style="{DynamicResource AuthWindow}" MouseDown="Window_MouseDown">
