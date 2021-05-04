@@ -14,6 +14,7 @@ namespace kupca4.ViewModels
         private readonly User user;
         private ViewModel _selectedVM;
         private WindowState _windowState = WindowState.Normal;
+        private bool _uploadBookMenuItemVisability;
         #endregion
 
         #region public fields
@@ -30,27 +31,24 @@ namespace kupca4.ViewModels
             set => Set(ref _windowState, value);
         }
 
-        public string test
+        public bool uploadBookMenuItemVisability
         {
-            get => user.Fullname;
+            get => _uploadBookMenuItemVisability;
         }
         #endregion
 
         #region Commands
 
         public ICommand WindowMinimizedCommand { get; }
-        private bool CanWindowMinimizedCommandExecute(object p) => true;
         private void OnWindowMinimizedCommandExecuted(object p) => windowState = WindowState.Minimized;
 
         public ICommand WindowMaximizeCommand { get; }
-        private bool CanWindowMaximizeCommandExecute(object p) => true;
         private void OnWindowMaximizeCommandExecuted(object p)
         {
             windowState = windowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
 
         public ICommand SwitchUserCommand { get; }
-        private bool CanSwitchUserCommandExecute(object p) => true;
         private void OnSwitchUserCommandExecuted(object p)
         {
             var LoginRegister = new LoginRegister();
@@ -59,7 +57,6 @@ namespace kupca4.ViewModels
         }
 
         public ICommand SwitchViewCommand { get; }
-        private bool CanSwitchViewCommandExecute(object p) => true;
         private void OnSwitchViewCommandExecuted(object p)
         {
             switch (p.ToString())
@@ -82,10 +79,12 @@ namespace kupca4.ViewModels
         {
             this.user = user;
 
-            WindowMinimizedCommand = new LambdaCommand(OnWindowMinimizedCommandExecuted, CanWindowMinimizedCommandExecute);
-            WindowMaximizeCommand = new LambdaCommand(OnWindowMaximizeCommandExecuted, CanWindowMaximizeCommandExecute);
-            SwitchUserCommand = new LambdaCommand(OnSwitchUserCommandExecuted, CanSwitchUserCommandExecute);
-            SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted, CanSwitchViewCommandExecute);
+            _uploadBookMenuItemVisability = user.Role != 2;
+
+            WindowMinimizedCommand = new LambdaCommand(OnWindowMinimizedCommandExecuted);
+            WindowMaximizeCommand = new LambdaCommand(OnWindowMaximizeCommandExecuted);
+            SwitchUserCommand = new LambdaCommand(OnSwitchUserCommandExecuted);
+            SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted);
 
             if (view == "MyBooks")
                 selectedVM = new MyBooksViewModel(user, this);

@@ -134,6 +134,8 @@ namespace kupca4.ViewModels.Views
         private void OnBookUploadCommandExecuted(object p)
         {
             var book = new Book(title, description, selectedGenre.GenreId, user.Username);
+            if (user.Role == 0)
+                context.Users.Find(user.Username).Role = 1;
             if (editBook == null)
             {
                 context.Books.Add(book);
@@ -150,7 +152,11 @@ namespace kupca4.ViewModels.Views
             Directory.CreateDirectory(_myDocumentsPath + @"\DuckLibrary");
             Directory.CreateDirectory(_myDocumentsPath + @"\DuckLibrary\books");
             Directory.CreateDirectory(_myDocumentsPath  + $@"\DuckLibrary\books\{book.BookId}");
-            File.Copy(_imgPath, _myDocumentsPath + $@"\DuckLibrary\books\{book.BookId}\cover.jpg", true);
+            try
+            {
+                File.Copy(_imgPath, _myDocumentsPath + $@"\DuckLibrary\books\{book.BookId}\cover.jpg", true);
+            }
+            catch { }
             try
             {
                 File.Copy(_pdfPath, _myDocumentsPath + $@"\DuckLibrary\books\{book.BookId}\book.pdf", true);

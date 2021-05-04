@@ -3,7 +3,6 @@ using kupca4.Helpers.Commands;
 using kupca4.ViewModels.Base;
 using System.Windows.Input;
 using System.Linq;
-using System.Windows;
 
 namespace kupca4.ViewModels.Views
 {
@@ -35,7 +34,7 @@ namespace kupca4.ViewModels.Views
         private void OnSwitchViewCommandExecuted(object p)
         {
             mainWindowVM.selectedVM = new AllBooksViewModel(user, mainWindowVM);
-        }
+        } 
 
         public ICommand ToFavoritesCommand { get; }
         private bool CanToFavoritesCommandExecute(object p) => context.SavedBooks.FirstOrDefault(s => s.BookId == _selectedBook.BookId && s.Username == user.Username) == null;

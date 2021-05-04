@@ -7,6 +7,7 @@
         xmlns:vm="clr-namespace:kupca4.ViewModels"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:kupca4"
+        xmlns:convert="clr-namespace:kupca4.Helpers.Converters"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         Icon="/Styles/img/favicon.ico"
         mc:Ignorable="d"
@@ -73,7 +74,7 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListViewItem>
-                <ListViewItem Margin="0,0,0,25" Foreground="#F2F1EF" Cursor="Hand">
+                <ListViewItem Margin="0,0,0,25" Foreground="#F2F1EF" Cursor="Hand" Visibility="{Binding uploadBookMenuItemVisability, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <ListViewItem.ToolTip>
                         <ToolTip Placement="Left" Content="Загрузить книгу"  HorizontalOffset="5" 
              VerticalOffset="10"/>

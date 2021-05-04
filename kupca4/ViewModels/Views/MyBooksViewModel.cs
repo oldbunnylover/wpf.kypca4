@@ -50,7 +50,7 @@ namespace kupca4.ViewModels.Views
             MainWindowVM = vm;
             _uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
             _likedBooksList = new ObservableCollection<Book>(context.Books.Where(b => context.SavedBooks.Where(s => s.Username == user.Username).Select(s => s.BookId).Contains(b.BookId)));
-
+            
             EditBookCommand = new LambdaCommand(OnEditBookCommandExecuted);
         }
     }
