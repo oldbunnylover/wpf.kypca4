@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 using System;
 using Microsoft.Win32;
 using System.Windows;
-using System.IO;
+using System.Net;
 
 namespace kupca4.ViewModels.Views
 {
@@ -18,9 +18,9 @@ namespace kupca4.ViewModels.Views
 
         private readonly User user;
         private readonly KP_LibraryContext context = new KP_LibraryContext();
-        private readonly string _myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         private readonly BitmapImage _noPhoto = new BitmapImage(new Uri("pack://application:,,,/Styles/img/noPhoto.png"));
         private readonly Book editBook;
+        private readonly WebClient myWebClient = new WebClient();
 
         private string _newGenre;
         private bool _dialog = false;
@@ -145,20 +145,18 @@ namespace kupca4.ViewModels.Views
                 editBook.Bookname = title;
                 editBook.Description = description;
                 editBook.GenreId = selectedGenre.GenreId;
-                
             }
             context.SaveChanges();
-            Directory.CreateDirectory(_myDocumentsPath + @"\DuckLibrary");
-            Directory.CreateDirectory(_myDocumentsPath + @"\DuckLibrary\books");
-            Directory.CreateDirectory(_myDocumentsPath  + $@"\DuckLibrary\books\{book.BookId}");
             try
             {
-                File.Copy(_imgPath, _myDocumentsPath + $@"\DuckLibrary\books\{book.BookId}\cover.jpg", true);
+                byte[] responseArray = myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _imgPath);
+                MessageBox.Show(System.Text.Encoding.ASCII.GetString(responseArray));
             }
-            catch { }
+            catch {
+            }
             try
             {
-                File.Copy(_pdfPath, _myDocumentsPath + $@"\DuckLibrary\books\{book.BookId}\book.pdf", true);
+                myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _pdfPath);
             }
             catch { }
             RestoreForm();
@@ -190,24 +188,39 @@ namespace kupca4.ViewModels.Views
 
         #endregion
 
-
         public BookUploadViewModel(User user, int bookID = -1)
         {
             this.user = user;
             if (bookID != -1)
             {
                 editBook = context.Books.Find(bookID);
-                _imgPath = _myDocumentsPath + $@"\DuckLibrary\books\{bookID}\cover.jpg";
-                _pdfPath = _myDocumentsPath + $@"\DuckLibrary\books\{bookID}\book.pdf";
-                _bookPicture.BeginInit();
-                _bookPicture.CacheOption = BitmapCacheOption.OnLoad;
-                _bookPicture.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                _bookPicture.UriSource = new Uri(_imgPath);
-                _bookPicture.EndInit();
                 fileCheck = Visibility.Visible;
                 title = editBook.Bookname;
                 description = editBook.Description;
-            } else
+                try
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"http://localhost:3000/books/{bookID}/cover.png");
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        _bookPicture.BeginInit();
+                        _bookPicture.CacheOption = BitmapCacheOption.OnLoad;
+                        _bookPicture.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                        _bookPicture.UriSource = new Uri($"http://localhost:3000/books/{bookID}/cover.png");
+                        _bookPicture.EndInit();
+                    }
+                    else
+                    {
+                        bookPicture = _noPhoto;
+                    }
+                    response.Close();
+                }
+                catch
+                {
+                    bookPicture = _noPhoto;
+                }
+            }
+            else
             {
                 bookPicture = _noPhoto;
             }

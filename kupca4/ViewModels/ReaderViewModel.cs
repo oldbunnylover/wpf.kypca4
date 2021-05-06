@@ -1,6 +1,5 @@
 ﻿using kupca4.DB;
 using kupca4.ViewModels.Base;
-using System;
 
 namespace kupca4.ViewModels
 {
@@ -21,7 +20,7 @@ namespace kupca4.ViewModels
 
         public ReaderViewModel(Book book)
         {
-            _bookPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + $@"\DuckLibrary\books\{book.BookId}\book.pdf";
+            _bookPath = $"http://localhost:3000/books/{book.BookId}/book.pdf";
             _title = $"{book.Bookname} - {book.AuthorName}";
         }
     }

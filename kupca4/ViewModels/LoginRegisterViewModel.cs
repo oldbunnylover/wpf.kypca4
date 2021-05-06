@@ -143,7 +143,6 @@ namespace kupca4.ViewModels
         public LoginRegisterViewModel()
         {
             #region Commands
-
             RegisterCommand = new LambdaCommand(OnRegisterCommandExecuted, CanRegisterCommandExecute);
             CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted, CanCloseDialogCommandExecute);
             LoginCommand = new LambdaCommand(OnLoginCommandExecuted, CanLoginCommandExecute);
