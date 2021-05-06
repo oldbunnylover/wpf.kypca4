@@ -32,6 +32,7 @@ namespace kupca4.ViewModels.Views
         public ObservableCollection<Book> likedBooksList
         {
             get => _likedBooksList;
+            set => Set(ref _likedBooksList, value);
         }
 
         #endregion
@@ -59,6 +60,14 @@ namespace kupca4.ViewModels.Views
             uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
         }
 
+        public ICommand RemoveFavoriteCommand { get; }
+        private void OnRemoveFavoriteCommandExecuted(object p)
+        {
+            context.SavedBooks.Remove(context.SavedBooks.Find(user.Username, (int)p));
+            context.SaveChanges();
+            likedBooksList = new ObservableCollection<Book>(context.Books.Where(b => context.SavedBooks.Where(s => s.Username == user.Username).Select(s => s.BookId).Contains(b.BookId)));
+        }
+
         public ICommand SwitchViewCommand { get; }
         private void OnSwitchViewCommandExecuted(object p)
         {
@@ -78,6 +87,7 @@ namespace kupca4.ViewModels.Views
             HideBookCommand = new LambdaCommand(OnHideBookCommandExecuted);
             ShowBookCommand = new LambdaCommand(OnShowBookCommandExecuted);
             SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted);
+            RemoveFavoriteCommand = new LambdaCommand(OnRemoveFavoriteCommandExecuted);
         }
     }
 }

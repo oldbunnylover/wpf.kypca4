@@ -15,7 +15,7 @@ namespace kupca4.ViewModels.Views
 
         private readonly User user;
         private readonly KP_LibraryContext context = new KP_LibraryContext();
-        private readonly List<string> _sorting = new List<string>{ "по новизне", "по алфавиту", "по популярности" };
+        private readonly List<string> _sorting = new List<string>{ "по новизне", "по алфавиту" };
         private readonly MainWindowViewModel parentVM;
 
         private string _sortingSelected;
@@ -43,9 +43,6 @@ namespace kupca4.ViewModels.Views
                         break;
                     case "по алфавиту":
                         booksList = new ObservableCollection<Book>(context.Books.OrderBy(b => b.Bookname).Where(b => b.Hidden == false && b.Applyed == true));
-                        break;
-                    case "по популярности":
-                        booksList = new ObservableCollection<Book>(context.Books.OrderBy(b => b.Rate).Where(b => b.Hidden == false && b.Applyed == true));
                         break;
                 }
             }

@@ -15,7 +15,9 @@ namespace kupca4.ViewModels.Views
         private readonly MainWindowViewModel mainWindowVM;
         private readonly bool fromMyBooks;
         private string savedSorting;
-
+        
+        private int _rate;
+        private bool _userRatePanelVisibility;
         private Book _selectedBook;
 
         #endregion
@@ -25,6 +27,29 @@ namespace kupca4.ViewModels.Views
         public Book selectedBook
         {
             get => _selectedBook;
+        }
+
+        public int rate
+        {
+            get => _rate;
+            set
+            {
+                Set(ref _rate, value);
+                if (context.BookRates.FirstOrDefault(b => b.BookId == _selectedBook.BookId && b.Username == user.Username) != null)
+                {
+                    context.BookRates.Find(user.Username, _selectedBook.BookId).UserRate = rate;
+                } else
+                {
+                    context.BookRates.Add(new BookRates {Username = user.Username, BookId = _selectedBook.BookId, UserRate = rate });
+                }
+                context.SaveChanges();
+            }
+        }
+
+        public bool userRatePanelVisibility
+        {
+            get => _userRatePanelVisibility;
+            set => Set(ref _userRatePanelVisibility, value);
         }
 
         #endregion
@@ -51,6 +76,7 @@ namespace kupca4.ViewModels.Views
         {
             context.SavedBooks.Add(new SavedBook { BookId = selectedBook.BookId, Username = user.Username });
             context.SaveChanges();
+            userRatePanelVisibility = true;
         }
 
         public ICommand ReadBookCommand { get; }
@@ -75,6 +101,15 @@ namespace kupca4.ViewModels.Views
             this.savedSorting = savedSorting;
 
             _selectedBook = context.Books.Find(bookID);
+            _userRatePanelVisibility = context.SavedBooks.FirstOrDefault(s => s.BookId == _selectedBook.BookId && s.Username == user.Username) != null;
+
+            if (context.BookRates.FirstOrDefault(b => b.BookId == bookID && b.Username == user.Username) != null)
+            {
+                _rate = context.BookRates.Find(user.Username, bookID).UserRate.Value;
+            } else
+            {
+                _rate = 0;
+            }
 
             SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted, CanSwitchViewCommandExecute);
             ToFavoritesCommand = new LambdaCommand(OnToFavoritesCommandExecuted, CanToFavoritesCommandExecute);

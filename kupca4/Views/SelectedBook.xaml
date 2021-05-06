@@ -13,10 +13,51 @@
         <convert:IDtoImageConverter x:Key="IDtoImageConverter"/>
         <convert:NicktoFullNameConverter x:Key="NicktoFullNameConverter"/>
         <convert:GenreIDtoGenreNameConverter x:Key="GenreIDtoGenreNameConverter"/>
+        <convert:IDtoRateConverter x:Key="IDtoRateConverter"/>
+        <convert:CheckBoxtoRate x:Key="CheckBoxtoRate"/>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <BulletDecorator Background="Transparent">
+                            <BulletDecorator.Bullet>
+                                <TextBlock x:Name="star" Cursor="Hand">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="#69E8A628"/>
+                                    </TextBlock.Foreground>
+                                    <materialDesign:PackIcon Kind="Star" Width="30" Height="30"/>
+                                </TextBlock>
+                            </BulletDecorator.Bullet>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="star" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0" Value="#e8a628" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Checked">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="star" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0" Value="#e8a628" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter Margin="0,0,5,0"/>
+                        </BulletDecorator>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Grid Background="#F2F1EF">
         <Grid.RowDefinitions>
-            <RowDefinition Height="56"/>
+            <RowDefinition Height="60"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Rectangle Grid.Row="0" Grid.ColumnSpan="6" Fill="#BFA37C82"></Rectangle>
@@ -28,21 +69,28 @@
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="320"/>
+                <RowDefinition Height="340"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="289"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Image Source="{Binding selectedBook.BookId, Converter={StaticResource IDtoImageConverter}}" Margin="50 30 0 0" HorizontalAlignment="Left"/>
-            <StackPanel Grid.Column="1" Margin="15 30 0 0">
-                <TextBlock Text="{Binding selectedBook.Bookname}" d:Text="afasfasfasfsfasfasfasfasfasfasfasfaasfasfsafasfasfasf" TextWrapping="Wrap" FontSize="30" MaxHeight="80"/>
+            <Image Source="{Binding selectedBook.BookId, Converter={StaticResource IDtoImageConverter}}" d:Source="/Styles/img/noPhoto.png" Margin="50 20 0 0" HorizontalAlignment="Left"/>
+            <StackPanel Grid.Column="1" Margin="15 20 0 0">
+                <TextBlock Text="{Binding selectedBook.Bookname}" d:Text="afasfasfasfsfasfasfasfasfasfasfasfaasfasfsafasfasfasf" TextWrapping="Wrap" FontSize="30" Height="80"/>
                 <TextBlock Text="{Binding selectedBook.AuthorName, Converter={StaticResource NicktoFullNameConverter}}" FontSize="20" Margin="0 7 0 0" Foreground="#6E304B"/>
                 <TextBlock Text="Жанр:" Margin="0 15 0 0" FontSize="18"/>
                 <TextBlock Text="{Binding selectedBook.GenreId, Converter={StaticResource GenreIDtoGenreNameConverter}}" Margin="0 5 0 0" FontSize="18" Foreground="#6E304B"/>
-                <TextBlock Text="{Binding Path=selectedBook.Rate,StringFormat='Оценка: \{0:0.00\}'}" Margin="0 15 0 0" FontSize="18"/>
-                <StackPanel HorizontalAlignment="Left" Margin="0 25 0 0" VerticalAlignment="Bottom" Orientation="Horizontal">
+                <TextBlock Text="{Binding Path=selectedBook.BookId, Converter={StaticResource IDtoRateConverter}, StringFormat='Оценка: \{0:0.00\}'}" Margin="0 15 0 0" FontSize="18"/>
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0" Height="26" Visibility="{Binding userRatePanelVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <CheckBox IsChecked="{Binding rate, Converter={StaticResource CheckBoxtoRate}, ConverterParameter=1}"/>
+                    <CheckBox IsChecked="{Binding rate, Converter={StaticResource CheckBoxtoRate}, ConverterParameter=2}"/>
+                    <CheckBox IsChecked="{Binding rate, Converter={StaticResource CheckBoxtoRate}, ConverterParameter=3}"/>
+                    <CheckBox IsChecked="{Binding rate, Converter={StaticResource CheckBoxtoRate}, ConverterParameter=4}"/>
+                    <CheckBox IsChecked="{Binding rate, Converter={StaticResource CheckBoxtoRate}, ConverterParameter=5}"/>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Left" Margin="0 15 0 0" VerticalAlignment="Bottom" Orientation="Horizontal">
                     <Button Height="46" Width="200" Content="Читать" FontSize="20" Command="{Binding ReadBookCommand}"/>
                     <Button Height="46" Width="200" Content="В избранное" FontSize="20" Margin="40 0 0 0" Command="{Binding ToFavoritesCommand}"/>
                 </StackPanel>

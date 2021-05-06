@@ -20,6 +20,7 @@ namespace kupca4.DB
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<SavedBook> SavedBooks { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<BookRates> BookRates { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -40,7 +41,7 @@ namespace kupca4.DB
 
                 entity.Property(e => e.Applyed)
                     .HasColumnName("applyed")
-                    .HasDefaultValueSql("((0))");
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Hidden)
                     .HasColumnName("hidden")
@@ -55,10 +56,6 @@ namespace kupca4.DB
                     .IsRequired()
                     .HasMaxLength(2000)
                     .HasColumnName("description");
-
-                entity.Property(e => e.Rate)
-                    .HasColumnName("rate")
-                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.GenreId).HasColumnName("genreID")
                     .IsRequired();
@@ -100,7 +97,6 @@ namespace kupca4.DB
                     .HasColumnName("username");
 
                 entity.Property(e => e.BookId).HasColumnName("bookID");
-                entity.Property(e => e.UserRate).HasColumnName("userRate").HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.Book)
                     .WithMany(p => p.SavedBooks)
@@ -141,6 +137,32 @@ namespace kupca4.DB
                 entity.Property(e => e.Role)
                     .HasColumnName("role")
                     .HasDefaultValueSql("((0))");
+            });
+
+            modelBuilder.Entity<BookRates>(entity =>
+            {
+                entity.HasKey(e => new { e.Username, e.BookId })
+                    .HasName("PK__BookRates__3B659F619AA05702");
+
+                entity.Property(e => e.Username)
+                    .HasMaxLength(255)
+                    .HasColumnName("username");
+
+                entity.Property(e => e.BookId).HasColumnName("bookID");
+
+                entity.Property(e => e.UserRate).HasColumnName("userRate");
+
+                entity.HasOne(d => d.Book)
+                    .WithMany(p => p.BookRates)
+                    .HasForeignKey(d => d.BookId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__BookRates__bookI__06CD04F7");
+
+                entity.HasOne(d => d.UsernameNavigation)
+                    .WithMany(p => p.BookRates)
+                    .HasForeignKey(d => d.Username)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__BookRates__usern__05D8E0BE");
             });
 
             OnModelCreatingPartial(modelBuilder);
