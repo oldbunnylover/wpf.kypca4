@@ -36,6 +36,9 @@
             <DataTemplate DataType="{x:Type vm:SelectedBookViewModel}">
                 <views:SelectedBook/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:UserViewModel}">
+                <views:User/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

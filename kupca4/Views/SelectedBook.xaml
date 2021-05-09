@@ -91,8 +91,8 @@
                     <CheckBox IsChecked="{Binding rate, Converter={StaticResource CheckBoxtoRate}, ConverterParameter=5}"/>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Left" Margin="0 15 0 0" VerticalAlignment="Bottom" Orientation="Horizontal">
+                    <Button Height="46" Width="200" Content="В избранное" FontSize="20" Margin="0 0 40 0" Command="{Binding ToFavoritesCommand}"/>
                     <Button Height="46" Width="200" Content="Читать" FontSize="20" Command="{Binding ReadBookCommand}"/>
-                    <Button Height="46" Width="200" Content="В избранное" FontSize="20" Margin="40 0 0 0" Command="{Binding ToFavoritesCommand}"/>
                 </StackPanel>
             </StackPanel>
             <ScrollViewer  Grid.ColumnSpan="2" Grid.Row="1">

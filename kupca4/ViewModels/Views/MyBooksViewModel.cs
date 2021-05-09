@@ -17,7 +17,7 @@ namespace kupca4.ViewModels.Views
         private readonly MainWindowViewModel MainWindowVM;
 
         private ObservableCollection<Book> _uploadedBooksList;
-        private ObservableCollection<Book> _likedBooksList = new ObservableCollection<Book>();
+        private ObservableCollection<Book> _likedBooksList;
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace kupca4.ViewModels.Views
         public ICommand EditBookCommand { get; }
         private void OnEditBookCommandExecuted(object p)
         {
-            MainWindowVM.selectedVM = new BookUploadViewModel(user, (int)p);
+            MainWindowVM.selectedVM = new BookUploadViewModel(user, MainWindowVM, (int)p);
         }
 
         public ICommand HideBookCommand { get; }
@@ -80,8 +80,8 @@ namespace kupca4.ViewModels.Views
         {
             this.user = user;
             MainWindowVM = vm;
-            _uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
-            _likedBooksList = new ObservableCollection<Book>(context.Books.Where(b => context.SavedBooks.Where(s => s.Username == user.Username).Select(s => s.BookId).Contains(b.BookId)));
+            likedBooksList = new ObservableCollection<Book>(context.Books.Where(b => context.SavedBooks.Where(s => s.Username == user.Username).Select(s => s.BookId).Contains(b.BookId)));
+            uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
             
             EditBookCommand = new LambdaCommand(OnEditBookCommandExecuted);
             HideBookCommand = new LambdaCommand(OnHideBookCommandExecuted);

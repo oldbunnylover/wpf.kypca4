@@ -91,7 +91,12 @@
                         <ToolTip Placement="Left" Content="Панель управления"  HorizontalOffset="5" 
              VerticalOffset="10"/>
                     </ListViewItem.ToolTip>
-                    <materialDesign:PackIcon Kind="Account" Width="40" Height="40"/>
+                    <materialDesign:PackIcon Kind="Tools" Width="40" Height="40"/>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding SwitchViewCommand}" CommandParameter="User"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </ListViewItem>
                 <ListViewItem Foreground="#F2F1EF">
                     <ListViewItem.ToolTip>

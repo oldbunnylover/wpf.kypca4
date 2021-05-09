@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
@@ -11,24 +10,13 @@ namespace kupca4.Helpers.Converters
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"http://localhost:3000/books/{(int)value}/cover.png");
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    BitmapImage imgTemp = new BitmapImage();
-                    imgTemp.BeginInit();
-                    imgTemp.CacheOption = BitmapCacheOption.OnLoad;
-                    imgTemp.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                    imgTemp.UriSource = new Uri($"http://localhost:3000/books/{(int)value}/cover.png");
-                    imgTemp.EndInit();
-                    response.Close();
-                    return imgTemp;
-                }
-                else
-                {
-                    response.Close();
-                    return "/Styles/img/noPhoto.png";
-                }
+                BitmapImage imgTemp = new BitmapImage();
+                imgTemp.BeginInit();
+                imgTemp.CacheOption = BitmapCacheOption.OnLoad;
+                //imgTemp.UriSource = new Uri($"http://localhost:3000/books/{(int)value}/cover.png");
+                imgTemp.UriSource = new Uri($"https://wpfkypca4.herokuapp.com/books/covers/{(int)value}");
+                imgTemp.EndInit();
+                return imgTemp;
             }
             catch
             {

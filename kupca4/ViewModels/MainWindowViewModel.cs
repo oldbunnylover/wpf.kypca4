@@ -62,13 +62,16 @@ namespace kupca4.ViewModels
             switch (p.ToString())
             {
                 case "BookUpload":
-                    selectedVM = new BookUploadViewModel(user);
+                    selectedVM = new BookUploadViewModel(user, this);
                     break;
                 case "AllBooks":
                     selectedVM = new AllBooksViewModel(user, this);
                     break;
                 case "MyBooks":
                     selectedVM = new MyBooksViewModel(user, this);
+                    break;
+                case "User":
+                    selectedVM = new UserViewModel(user);
                     break;
             }
         }
