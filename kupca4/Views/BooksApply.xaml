@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="kupca4.Views.BooksApply"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:kupca4.ViewModels.Views"
+             xmlns:convert="clr-namespace:kupca4.Helpers.Converters"
+             d:DataContext="{d:DesignInstance Type=vm:BooksApplyViewModel}"
+             xmlns:local="clr-namespace:kupca4.Views" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:Background="#F2F1EF"
+             d:DesignHeight="479" d:DesignWidth="864">
+    <UserControl.Resources>
+        <convert:GenreIDtoGenreNameConverter x:Key="GenreIDtoGenreNameConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <ListView ItemsSource="{Binding newBooksList}" x:Name="ListViewNewBooks">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Bookname}" Width="340"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding AuthorName}" Header="Автор" Width="200"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding GenreId, Converter={StaticResource GenreIDtoGenreNameConverter}}" Header="Жанр" Width="150"/>
+                    <GridViewColumn Header="Действия" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Padding="1" Width="30" Height="30" Foreground="Black" Background="Transparent" BorderBrush="Transparent" 
+                                            ToolTip="Подробнее" Command="{Binding ElementName=ListViewNewBooks, Path=DataContext.MoreInfoCommand}" CommandParameter="{Binding BookId}">
+                                        <materialDesign:PackIcon Kind="Magnify"/>
+                                    </Button>
+                                    <Button Padding="1" Width="30" Height="30" Foreground="Black" Background="Transparent" BorderBrush="Transparent" 
+                                            ToolTip="Принять" Command="{Binding ElementName=ListViewNewBooks, Path=DataContext.ApplyBookCommand}" CommandParameter="{Binding BookId}">
+                                        <materialDesign:PackIcon Kind="Check"/>
+                                    </Button>
+                                    <Button Padding="1" Width="30" Height="30" Foreground="Black" Background="Transparent" BorderBrush="Transparent" 
+                                            ToolTip="Отклонить" Command="{Binding ElementName=ListViewNewBooks, Path=DataContext.DeclineBookCommand}" CommandParameter="{Binding BookId}">
+                                        <materialDesign:PackIcon Kind="Close"/>
+                                    </Button>
+                                    <Button Padding="1" Width="30" Height="30" Foreground="Black" Background="Transparent" BorderBrush="Transparent" 
+                                            ToolTip="Заблокировать автора" Command="{Binding ElementName=ListViewNewBooks, Path=DataContext.AuthorBlockCommand}" CommandParameter="{Binding BookId}">
+                                        <materialDesign:PackIcon Kind="AccountCancel"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</UserControl>

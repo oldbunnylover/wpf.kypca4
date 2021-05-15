@@ -26,7 +26,7 @@ namespace kupca4.DB
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=localhost;Database=KP_Library;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=tcp:courseprojectformsuicservice.database.windows.net,1433;Initial Catalog=KP_Library;Persist Security Info=False;User ID=NIikitoza;Password=140410qq!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=20;");
             }
         }
 
@@ -39,9 +39,9 @@ namespace kupca4.DB
 
                 entity.Property(e => e.BookId).HasColumnName("bookID");
 
-                entity.Property(e => e.Applyed)
-                    .HasColumnName("applyed")
-                    .HasDefaultValueSql("((1))");
+                entity.Property(e => e.Applied)
+                    .HasColumnName("applied")
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Hidden)
                     .HasColumnName("hidden")

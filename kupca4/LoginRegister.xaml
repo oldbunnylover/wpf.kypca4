@@ -16,7 +16,7 @@
     <Window.DataContext>
         <vm:LoginRegisterViewModel/>
     </Window.DataContext>
-    <materialDesign:DialogHost 
+    <materialDesign:DialogHost CloseOnClickAway="True"
         IsOpen="{Binding dialog}">
         <materialDesign:DialogHost.DialogContent>
             <Border Height="Auto" Width="Auto">

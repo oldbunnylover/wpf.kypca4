@@ -9,7 +9,7 @@
              d:DataContext="{d:DesignInstance Type=vm:BookUploadViewModel}"
              d:DesignHeight="585" d:DesignWidth="864"
              d:Background="#F2F1EF">
-    <materialDesign:DialogHost 
+    <materialDesign:DialogHost CloseOnClickAway="True"
         IsOpen="{Binding dialog}">
         <materialDesign:DialogHost.DialogContent>
             <Border Height="Auto" Width="Auto">

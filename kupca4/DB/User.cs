@@ -7,6 +7,14 @@ using System.Text;
 
 namespace kupca4.DB
 {
+    public enum UserRole
+    {
+        User,
+        Author,
+        Moderator,
+        Admin
+    }
+
     public partial class User
     {
         public User()
@@ -15,7 +23,7 @@ namespace kupca4.DB
         }
 
         public string Username { get; set; }
-        public int? Role { get; set; }
+        public UserRole? Role { get; set; }
         public string Fullname { get; set; }
         public string Password { get; set; }
         public bool? Blocked { get; set; }
@@ -30,6 +38,11 @@ namespace kupca4.DB
         public virtual ICollection<SavedBook> SavedBooks { get; set; }
         public virtual ICollection<BookRates> BookRates { get; set; }
         public virtual ICollection<Book> Books { get; set; }
+
+        public override string ToString()
+        {
+            return Username;
+        }
 
         public static string getHash(string password)
         {

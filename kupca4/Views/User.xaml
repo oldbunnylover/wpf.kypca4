@@ -3,31 +3,44 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:kupca4.Views"
              xmlns:vm="clr-namespace:kupca4.ViewModels.Views"
-             xmlns:convert="clr-namespace:kupca4.Helpers.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DataContext="{d:DesignInstance Type=vm:UserViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="585" d:DesignWidth="864"
              d:Background="#F2F1EF">
-    <Grid>
+    <materialDesign:DialogHost IsOpen="{Binding dialog}" OverlayBackground="Transparent" CloseOnClickAway="True">
+        <materialDesign:DialogHost.DialogContent>
+            <Border Height="Auto" Width="400">
+                <StackPanel Margin="16">
+                    <ComboBox materialDesign:HintAssist.Hint="Поиск по псевдониму" materialDesign:HintAssist.HintOpacity=".26" Text="{Binding searchString}"
+                              IsEditable="True" SelectedItem="{Binding selectedModer, UpdateSourceTrigger=PropertyChanged}" TextBoxBase.TextChanged="ComboBox_TextChanged"
+                              ItemsSource="{Binding moderList, UpdateSourceTrigger=PropertyChanged}" IsDropDownOpen="{Binding searchResults}"/>
+                    <StackPanel Margin="0 20 0 0" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Подтвердить" Width="130" Command="{Binding NewModeratorCommand}"/>
+                        <Button Content="Отмена" Width="130" Margin="40 0 0 0" Command="{Binding CloseDialogCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="56"/>
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Rectangle Grid.Row="0" Grid.ColumnSpan="6" Fill="#BFA37C82"></Rectangle>
+        <Rectangle Grid.Row="0" Fill="#BFA37C82"></Rectangle>
         <TextBlock Text="Панель управления" Grid.ColumnSpan="2" FontSize="27" TextAlignment="Left" VerticalAlignment="Center" Foreground="#F2F1EF" Margin="20,0,0,0" />
         <Menu Grid.Row="1" IsMainMenu="True">
             <MenuItem Header="Модерация">
                 <MenuItem Header="Публикация книг" Command="{Binding SwitchViewCommand}" CommandParameter="BooksApply"/>
-                <MenuItem Header="Блокировка писателей"/>
             </MenuItem>
-            <MenuItem Header="Администрирование">
-                <MenuItem Header="Назначить модератора"/>
+            <MenuItem Header="Администрирование" Visibility="{Binding isAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <MenuItem Header="Назначить модератора" Command="{Binding SwitchViewCommand}" CommandParameter="NewModerator"/>
+                <MenuItem Header="Разблокировать писателя" Command="{Binding SwitchViewCommand}" CommandParameter="AuthorUnblock"/>
             </MenuItem>
         </Menu>
-        <ContentControl Grid.Row="2"/>
+        <ContentControl Grid.Row="2" Content="{Binding selectedVM}"/>
     </Grid>
+    </materialDesign:DialogHost>
 </UserControl>

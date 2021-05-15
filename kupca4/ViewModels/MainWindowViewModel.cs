@@ -15,6 +15,7 @@ namespace kupca4.ViewModels
         private ViewModel _selectedVM;
         private WindowState _windowState = WindowState.Normal;
         private bool _uploadBookMenuItemVisability;
+        private bool _contrloPaneMenuItemVisability;
         #endregion
 
         #region public fields
@@ -34,6 +35,11 @@ namespace kupca4.ViewModels
         public bool uploadBookMenuItemVisability
         {
             get => _uploadBookMenuItemVisability;
+        }
+
+        public bool contrloPaneMenuItemVisability
+        {
+            get => _contrloPaneMenuItemVisability;
         }
         #endregion
 
@@ -71,7 +77,7 @@ namespace kupca4.ViewModels
                     selectedVM = new MyBooksViewModel(user, this);
                     break;
                 case "User":
-                    selectedVM = new UserViewModel(user);
+                    selectedVM = new UserViewModel(user, this);
                     break;
             }
         }
@@ -82,7 +88,8 @@ namespace kupca4.ViewModels
         {
             this.user = user;
 
-            _uploadBookMenuItemVisability = user.Role != 2;
+            _uploadBookMenuItemVisability = user.Role != UserRole.Moderator;
+            _contrloPaneMenuItemVisability = user.Role != UserRole.User && user.Role != UserRole.Author;
 
             WindowMinimizedCommand = new LambdaCommand(OnWindowMinimizedCommandExecuted);
             WindowMaximizeCommand = new LambdaCommand(OnWindowMaximizeCommandExecuted);

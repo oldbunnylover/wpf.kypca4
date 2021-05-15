@@ -20,8 +20,7 @@ namespace kupca4.ViewModels
 
         public ReaderViewModel(Book book)
         {
-            //_bookPath = $"http://localhost:3000/books/{book.BookId}/book.pdf";
-            _bookPath = $"https://wpfkypca4.herokuapp.com/books/{book.BookId}";
+            _bookPath = $"http://localhost:3000/books/{book.BookId}/book.pdf";
             _title = $"{book.Bookname} - {book.AuthorName}";
         }
     }

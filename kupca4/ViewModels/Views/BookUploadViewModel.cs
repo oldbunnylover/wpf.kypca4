@@ -140,7 +140,7 @@ namespace kupca4.ViewModels.Views
         {
             var book = new Book(title, description, selectedGenre.GenreId, user.Username);
             if (user.Role == 0)
-                context.Users.Find(user.Username).Role = 1;
+                context.Users.Find(user.Username).Role = UserRole.Author;
             if (editBook == null)
             {
                 context.Books.Add(book);
@@ -151,24 +151,24 @@ namespace kupca4.ViewModels.Views
                 editBook.Bookname = title;
                 editBook.Description = description;
                 editBook.GenreId = selectedGenre.GenreId;
+                editBook.Applied = BookStatus.NeedModer;
             }
             context.SaveChanges();
             try
             {
-                //byte[] responseArray = myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _imgPath);
-                byte[] responseArray = myWebClient.UploadFile($"https://wpfkypca4.herokuapp.com/upload/{book.BookId}", _imgPath);
+                byte[] responseArray = myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _imgPath);
                 MessageBox.Show(System.Text.Encoding.ASCII.GetString(responseArray));
                 _updatePicture.BeginInit();
                 _updatePicture.CacheOption = BitmapCacheOption.OnLoad;
                 _updatePicture.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                _updatePicture.UriSource = new Uri($"https://wpfkypca4.herokuapp.com/books/covers/{book.BookId}");
+                _updatePicture.UriSource = new Uri($"http://localhost:3000/books/{book.BookId}/cover.png");
                 _updatePicture.EndInit();
             }
             catch {
             }
             try
             {
-                myWebClient.UploadFile($"https://wpfkypca4.herokuapp.com/upload/{book.BookId}", _pdfPath);
+                myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _pdfPath);
             }
             catch { }
             RestoreForm();
@@ -215,7 +215,7 @@ namespace kupca4.ViewModels.Views
                     _bookPicture.BeginInit();
                     _bookPicture.CacheOption = BitmapCacheOption.OnLoad;
                     _bookPicture.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                    _bookPicture.UriSource = new Uri($"https://wpfkypca4.herokuapp.com/books/covers/{bookID}");
+                    _bookPicture.UriSource = new Uri($"http://localhost:3000/books/{bookID}/cover.png");
                     _bookPicture.EndInit();
                 }
                 catch

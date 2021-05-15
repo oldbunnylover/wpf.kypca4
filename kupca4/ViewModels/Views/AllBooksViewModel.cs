@@ -39,10 +39,10 @@ namespace kupca4.ViewModels.Views
                 switch (sortingSelected)
                 {
                     case "по новизне":
-                        booksList = new ObservableCollection<Book>(context.Books.OrderByDescending(b => b.BookId).Where(b => b.Hidden == false && b.Applyed == true));
+                        booksList = new ObservableCollection<Book>(context.Books.OrderByDescending(b => b.BookId).Where(b => b.Hidden == false && b.Applied == BookStatus.Applied));
                         break;
                     case "по алфавиту":
-                        booksList = new ObservableCollection<Book>(context.Books.OrderBy(b => b.Bookname).Where(b => b.Hidden == false && b.Applyed == true));
+                        booksList = new ObservableCollection<Book>(context.Books.OrderBy(b => b.Bookname).Where(b => b.Hidden == false && b.Applied == BookStatus.Applied));
                         break;
                 }
             }
@@ -62,7 +62,7 @@ namespace kupca4.ViewModels.Views
         public ICommand SwitchViewCommand { get; }
         private void OnSwitchViewCommandExecuted(object p)
         {
-            parentVM.selectedVM = new SelectedBookViewModel(user, (int)p, parentVM, false, sortingSelected);
+            parentVM.selectedVM = new SelectedBookViewModel(user, (int)p, parentVM, this);
         }
 
         #endregion

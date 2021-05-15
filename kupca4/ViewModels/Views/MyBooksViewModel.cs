@@ -71,7 +71,7 @@ namespace kupca4.ViewModels.Views
         public ICommand SwitchViewCommand { get; }
         private void OnSwitchViewCommandExecuted(object p)
         {
-            MainWindowVM.selectedVM = new SelectedBookViewModel(user, (int)p, MainWindowVM, true);
+            MainWindowVM.selectedVM = new SelectedBookViewModel(user, (int)p, MainWindowVM, this);
         }
 
         #endregion

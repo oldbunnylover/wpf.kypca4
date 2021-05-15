@@ -4,6 +4,14 @@
 
 namespace kupca4.DB
 {
+    public enum BookStatus
+    {
+        NeedModer,
+        Applied,
+        Canceled,
+        Banned
+    }
+
     public partial class Book
     {
         public Book()
@@ -14,7 +22,7 @@ namespace kupca4.DB
         public int BookId { get; set; }
         public string Bookname { get; set; }
         public string Description { get; set; }
-        public bool? Applyed { get; set; }
+        public BookStatus? Applied { get; set; }
         public bool? Hidden { get; set; }
         public int GenreId { get; set; }
         public string AuthorName { get; set; }
