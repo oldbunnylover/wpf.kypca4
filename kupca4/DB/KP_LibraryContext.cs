@@ -26,7 +26,7 @@ namespace kupca4.DB
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=tcp:courseprojectformsuicservice.database.windows.net,1433;Initial Catalog=KP_Library;Persist Security Info=False;User ID=NIikitoza;Password=140410qq!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=20;");
+                optionsBuilder.UseSqlServer("Server=tcp:courseprojectformsuicservice.database.windows.net,1433;Initial Catalog=KP_Library;Persist Security Info=False;User ID=NIikitoza;Password=140410qq!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=5;");
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using kupca4.DB;
@@ -21,10 +22,24 @@ namespace kupca4.ViewModels
         private bool _loading = false;
         private bool _dialog = false;
         private string _dialogText;
+        private string _passError;
+        private bool _passErrorVisibility = false;
 
         #endregion
 
         #region public fields
+
+        public string passError
+        {
+            get => _passError;
+            set => Set(ref _passError, value);
+        }
+
+        public bool passErrorVisibility
+        {
+            get => _passErrorVisibility;
+            set => Set(ref _passErrorVisibility, value);
+        }
 
         public string name
         {
@@ -47,7 +62,26 @@ namespace kupca4.ViewModels
         public string registerPassword
         {
             get => _registerPassword;
-            set => Set(ref _registerPassword, value);
+            set
+            {
+                Set(ref _registerPassword, value);
+                passErrorVisibility = false;
+                if (value.Length < 6)
+                {
+                    passError = "Пароль должен состоять минимум из 6 символов.";
+                    passErrorVisibility = true;
+                }
+                if (value.Length > 25)
+                {
+                    passError = "Пароль должен состоять максимум из 25 символов.";
+                    passErrorVisibility = true;
+                }
+                if (new Regex("[^a-zA-Z0-9!?.@]+$").IsMatch(value))
+                {
+                    passError = "Пароль может содержать только латиницу, цифры и специальные символы('!', '?', '.', '@')";
+                    passErrorVisibility = true;
+                }
+            }
         }
 
         public string loginUsername
@@ -82,11 +116,25 @@ namespace kupca4.ViewModels
 
         #endregion
 
+        #region ValidationMethods
+
+        public void UsernameInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = new Regex("[^a-zA-Z]$").IsMatch(e.Text);
+        }
+
+        public void SurnameNameInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = new Regex("[^a-zA-Zа-яА-я]$").IsMatch(e.Text);
+        }
+
+        #endregion
+
         #region Commands
 
         public ICommand RegisterCommand { get; }
-        private bool CanRegisterCommandExecute(object p) => name?.Length > 0 && surname?.Length > 0 
-            && registerUsername?.Length > 0 && registerPassword?.Length > 0;
+        private bool CanRegisterCommandExecute(object p) => name?.Length > 1 && name?.Length < 16 && surname?.Length > 1 && surname?.Length < 21
+            && registerUsername?.Length > 3 && registerUsername?.Length < 16 && registerPassword?.Length > 0 && !passErrorVisibility;
 
         private void OnRegisterCommandExecuted(object p)
         {
@@ -135,7 +183,6 @@ namespace kupca4.ViewModels
         }
 
         public ICommand CloseDialogCommand { get; }
-        private bool CanCloseDialogCommandExecute(object p) => true;
         private void OnCloseDialogCommandExecuted(object p) => dialog = false;
 
         #endregion
@@ -144,7 +191,7 @@ namespace kupca4.ViewModels
         {
             #region Commands
             RegisterCommand = new LambdaCommand(OnRegisterCommandExecuted, CanRegisterCommandExecute);
-            CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted, CanCloseDialogCommandExecute);
+            CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted);
             LoginCommand = new LambdaCommand(OnLoginCommandExecuted, CanLoginCommandExecute);
 
             #endregion

@@ -13,7 +13,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
+            
             <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#FFA37C82"/>
             <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="#F2F1EF"/>
             <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#6E304B"/>
@@ -23,6 +23,7 @@
             <!-- accent -->
             <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="#F2F1EF"/>
             <SolidColorBrush x:Key="SecondaryHueMidForegroundBrush" Color="#6E304B"/>
+            <SolidColorBrush x:Key="MaterialDesignValidationErrorBrush" Color="#c33124"/>
 
             <DataTemplate DataType="{x:Type vm:BookUploadViewModel}">
                 <views:BookUpload/>
