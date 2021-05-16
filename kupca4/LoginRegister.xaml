@@ -14,9 +14,6 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Style="{DynamicResource AuthWindow}" MouseDown="Window_MouseDown">
-    <Window.Resources>
-
-    </Window.Resources>
     <Window.DataContext>
         <vm:LoginRegisterViewModel/>
     </Window.DataContext>

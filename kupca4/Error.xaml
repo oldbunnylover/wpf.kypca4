@@ -1,0 +1,19 @@
+﻿<Window x:Class="kupca4.Error"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cmd="clr-namespace:kupca4.Helpers.Commands" 
+        xmlns:local="clr-namespace:kupca4"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        Title="Error" Height="150" Width="300"
+        WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="{Binding ErrorMsg}" d:Text="Отсутствует интернет-соединение." FontSize="14"/>
+            <Button Margin="0 20 0 0" Width="150" Content="Повторить" Command="{Binding TryAgainCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:Error}}"/>
+            <Button Margin="0 10 0 0" Width="150" Content="Выход" Command=""/>
+        </StackPanel>
+    </Grid>
+</Window>

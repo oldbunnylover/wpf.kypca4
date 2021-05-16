@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -11,7 +12,6 @@ namespace kupca4.ViewModels
     class LoginRegisterViewModel : ViewModel
     {
         #region private fields
-
         private readonly KP_LibraryContext context = new KP_LibraryContext();
         private string _name;
         private string _surname;
@@ -130,6 +130,34 @@ namespace kupca4.ViewModels
 
         #endregion
 
+        private bool ServerCheck()
+        {
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:3000/");
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    response.Close();
+                    return true;
+                }
+                else
+                {
+                    dialogText = "Отсутствует подключение к серверу.";
+                    dialog = true;
+                    response.Close();
+                    return false;
+                }
+            }
+            catch
+            {
+                dialogText = "Отсутствует подключение к серверу.";
+                dialog = true;
+            }
+            return false;
+        }
+
         #region Commands
 
         public ICommand RegisterCommand { get; }
@@ -138,23 +166,26 @@ namespace kupca4.ViewModels
 
         private void OnRegisterCommandExecuted(object p)
         {
-            if (context.Users.FirstOrDefault(u => u.Username == registerUsername) == null)
+            if (ServerCheck())
             {
-                User user = new User(name, surname, registerUsername, registerPassword);
-                context.Users.Add(user);
-                context.SaveChanges();
-                var MainWindowViewModel = new MainWindowViewModel(user, "AllBooks");
-                var MainWindow = new MainWindow
+                if (context.Users.FirstOrDefault(u => u.Username == registerUsername) == null)
                 {
-                    DataContext = MainWindowViewModel
-                };
-                MainWindow.Show();
-                (p as Window).Close();
-            }
-            else
-            {
-                dialogText = "Пользователь с данным псевдонимом уже зарегистрирован.";
-                dialog = true;
+                    User user = new User(name, surname, registerUsername, registerPassword);
+                    context.Users.Add(user);
+                    context.SaveChanges();
+                    var MainWindowViewModel = new MainWindowViewModel(user, "AllBooks");
+                    var MainWindow = new MainWindow
+                    {
+                        DataContext = MainWindowViewModel
+                    };
+                    MainWindow.Show();
+                    (p as Window).Close();
+                }
+                else
+                {
+                    dialogText = "Пользователь с данным псевдонимом уже зарегистрирован.";
+                    dialog = true;
+                }
             }
         }
 
@@ -162,23 +193,25 @@ namespace kupca4.ViewModels
         private bool CanLoginCommandExecute(object p) => loginUsername?.Length > 0 && loginPassword?.Length > 0;
         private void OnLoginCommandExecuted(object p)
         {
-            loading = true;
-            if (context.Users.FirstOrDefault(u => u.Username == loginUsername && u.Password == User.getHash(loginPassword)) != null)
+            if (ServerCheck())
             {
-                User user = context.Users.FirstOrDefault(u => u.Username == loginUsername);
-                var MainWindowViewModel = new MainWindowViewModel(user, "MyBooks");
-                var MainWindow = new MainWindow
+                if (context.Users.FirstOrDefault(u => u.Username == loginUsername && u.Password == User.getHash(loginPassword)) != null)
                 {
-                    DataContext = MainWindowViewModel
-                };
-                MainWindow.Show();
-                (p as Window).Close();
-            }
-            else
-            {
-                loading = false;
-                dialogText = "Неверный логин или пароль.";
-                dialog = true;
+                    User user = context.Users.FirstOrDefault(u => u.Username == loginUsername);
+                    var MainWindowViewModel = new MainWindowViewModel(user, "MyBooks");
+                    var MainWindow = new MainWindow
+                    {
+                        DataContext = MainWindowViewModel
+                    };
+                    MainWindow.Show();
+                    (p as Window).Close();
+                }
+                else
+                {
+                    loading = false;
+                    dialogText = "Неверный логин или пароль.";
+                    dialog = true;
+                }
             }
         }
 
