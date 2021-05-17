@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:kupca4.ViewModels.Views"
+            xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:validation="clr-namespace:kupca4.Helpers.Validation"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:BookUploadViewModel}"
              d:DesignHeight="585" d:DesignWidth="864"
@@ -57,53 +59,78 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="1" Margin="0,10,0,0">
                         <TextBox 
-                             Text="{Binding title}"
                              VerticalAlignment="Top"
                              HorizontalAlignment="Stretch"
-                             TextWrapping="Wrap"
                              Height="30"
                              Margin="20 10 20 10"
                              MaxHeight="160"
+                             materialDesign:ValidationAssist.Background="Transparent"
                              MaxWidth="400"
                              materialDesign:HintAssist.Hint="Название"
                              materialDesign:HintAssist.Foreground="#696969"
                              FontSize="18" Grid.ColumnSpan="2" >
+                        <TextBox.Text>
+                                <Binding Path="title" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <validation:LengthRule MaximumLength="64" MinimumLength="2" ValidationStep="UpdatedValue"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
                         </TextBox>
                         <TextBox Grid.Row="1"
-                             Text="{Binding description}"
                              Margin="20,10,20,20"
                              AcceptsReturn="True"
                              TextWrapping="Wrap"
                              Height="161"
                              MaxHeight="250"
+                             materialDesign:ValidationAssist.Background="Transparent"
                              VerticalScrollBarVisibility="Auto"
                              MaxWidth="400"
                              materialDesign:HintAssist.Hint="Описание"
                              materialDesign:HintAssist.Foreground="#696969"
                              FontSize="18" Grid.ColumnSpan="2" >
+                            <TextBox.Text>
+                                <Binding Path="description" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:LengthRule MaximumLength="1850" MinimumLength="2" ValidationStep="UpdatedValue"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
                         </TextBox>
                         <ComboBox materialDesign:HintAssist.Hint="Жанр"
                               ItemsSource="{Binding genres}"
-                                  SelectedItem="{Binding selectedGenre}"
+                                  SelectedItem="{Binding selectedGenreName}"
                                   Margin="20 10 20 10"
                                   MaxHeight="60"
                                   MaxWidth="400"
                                   materialDesign:HintAssist.Foreground="#696969"
                                   FontSize="18">
                         </ComboBox>
-                        <Button Foreground="#F2F1EF" Margin="0 25 0 0" FontSize="14" Width="120" Content="Загрузить" Command="{Binding BookUploadCommand}"/>
+                        <Button Foreground="#F2F1EF" Margin="0 20 0 0" FontSize="14" Width="120" Content="Загрузить" Command="{Binding BookUploadCommand}"/>
                         <TextBox 
-                            Text="{Binding newGenre, UpdateSourceTrigger=PropertyChanged}"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Stretch"
                             TextWrapping="Wrap"
                             Height="30"
-                            Margin="20 50 20 10"
+                            Margin="20 45 20 25"
                             MaxHeight="160"
                             MaxWidth="400"
                             materialDesign:HintAssist.Hint="Новый жанр"
                             materialDesign:HintAssist.Foreground="#696969"
+                             materialDesign:ValidationAssist.Background="Transparent"
                             FontSize="18" Grid.ColumnSpan="2" >
+                        <TextBox.Text>
+                            <Binding Path="newGenre" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <validation:LengthRule MaximumLength="40" MinimumLength="2" ValidationStep="UpdatedValue"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="PreviewTextInput" >
+                                    <i:CallMethodAction TargetObject="{Binding}" MethodName="GenreInput"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </TextBox>
                         <Button Foreground="#F2F1EF" FontSize="14" Width="137" Content="Добавить жанр" Command="{Binding GenreAddCommand}"/>
                     </StackPanel>

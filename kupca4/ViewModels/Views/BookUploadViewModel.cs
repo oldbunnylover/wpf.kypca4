@@ -9,6 +9,7 @@ using System;
 using Microsoft.Win32;
 using System.Windows;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace kupca4.ViewModels.Views
 {
@@ -26,8 +27,8 @@ namespace kupca4.ViewModels.Views
         private string _newGenre;
         private bool _dialog = false;
         private string _dialogText;
-        private ObservableCollection<Genre> _genres = new ObservableCollection<Genre>((new KP_LibraryContext()).Genres);
-        private Genre _selectedGenre;
+        private ObservableCollection<string> _genres;
+        private string _selectedGenreName;
         private string _title;
         private string _description;
         private BitmapImage _bookPicture = new BitmapImage();
@@ -46,7 +47,7 @@ namespace kupca4.ViewModels.Views
             set => Set(ref _newGenre, value);
         }
 
-        public ObservableCollection<Genre> genres
+        public ObservableCollection<string> genres
         {
             get => _genres;
             set => Set(ref _genres, value);
@@ -64,10 +65,10 @@ namespace kupca4.ViewModels.Views
             set => Set(ref _dialogText, value);
         }
 
-        public Genre selectedGenre
+        public string selectedGenreName
         {
-            get => _selectedGenre;
-            set => Set(ref _selectedGenre, value);
+            get => _selectedGenreName;
+            set => Set(ref _selectedGenreName, value);
         }
 
         public string title
@@ -102,7 +103,7 @@ namespace kupca4.ViewModels.Views
             {
                 MainVM.selectedVM = new MyBooksViewModel(user, MainVM);
             }
-            genres = new ObservableCollection<Genre>(context.Genres);
+            selectedGenreName = null;
             title = "";
             description = "";
             bookPicture = _noPhoto;
@@ -111,10 +112,15 @@ namespace kupca4.ViewModels.Views
             _pdfPath = "";
         }
 
+        public void GenreInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = new Regex("[^а-яА-я]$").IsMatch(e.Text);
+        }
+
         #region commands
 
         public ICommand GenreAddCommand { get; }
-        private bool CanGenreAddCommandExecute(object p) => newGenre?.Length > 0;
+        private bool CanGenreAddCommandExecute(object p) => newGenre?.Length > 1 && newGenre?.Length < 41;
         private void OnGenreAddCommandExecuted(object p)
         {
             try
@@ -124,7 +130,7 @@ namespace kupca4.ViewModels.Views
                     context.Genres.Add(new Genre { Genrename = newGenre });
                     context.SaveChanges();
                     newGenre = "";
-                    genres = new ObservableCollection<Genre>(context.Genres);
+                    genres = new ObservableCollection<string>(context.Genres.Select(g => g.Genrename));
                 }
                 else
                 {
@@ -143,12 +149,13 @@ namespace kupca4.ViewModels.Views
         private void OnCloseDialogCommandExecuted(object p) => dialog = false;
 
         public ICommand BookUploadCommand { get; }
-        private bool CanBookUploadCommandExecute(object p) => true;
+        private bool CanBookUploadCommandExecute(object p) => title?.Length > 1 && title?.Length < 65 && description?.Length > 1 
+            && description?.Length < 1851 && (editBook != null || _imgPath?.Length > 0) && (editBook != null || _pdfPath?.Length > 0);
         private void OnBookUploadCommandExecuted(object p)
         {
             try
             {
-                var book = new Book(title, description, selectedGenre.GenreId, user.Username);
+                var book = new Book(title, description, context.Genres.FirstOrDefault(g => g.Genrename == selectedGenreName).GenreId, user.Username);
                 if (user.Role == 0)
                     context.Users.Find(user.Username).Role = UserRole.Author;
                 if (editBook == null)
@@ -160,7 +167,7 @@ namespace kupca4.ViewModels.Views
                     book.BookId = editBook.BookId;
                     editBook.Bookname = title;
                     editBook.Description = description;
-                    editBook.GenreId = selectedGenre.GenreId;
+                    editBook.GenreId = context.Genres.FirstOrDefault(g => g.Genrename == selectedGenreName).GenreId;
                     editBook.Applied = BookStatus.NeedModer;
                 }
                 context.SaveChanges();
@@ -218,12 +225,16 @@ namespace kupca4.ViewModels.Views
         {
             this.user = user;
             MainVM = vm;
+
+            _genres = new ObservableCollection<string>(context.Genres.Select(g => g.Genrename));
+
             if (bookID != -1)
             {
                 editBook = context.Books.Find(bookID);
                 fileCheck = Visibility.Visible;
                 title = editBook.Bookname;
                 description = editBook.Description;
+                selectedGenreName = context.Genres.Find(editBook.GenreId).Genrename;
                 try
                 {
                     _bookPicture.BeginInit();
