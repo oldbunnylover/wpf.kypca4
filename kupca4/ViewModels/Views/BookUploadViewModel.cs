@@ -117,17 +117,25 @@ namespace kupca4.ViewModels.Views
         private bool CanGenreAddCommandExecute(object p) => newGenre?.Length > 0;
         private void OnGenreAddCommandExecuted(object p)
         {
-            if (context.Genres.FirstOrDefault(g => g.Genrename == newGenre) == null)
+            try
             {
-                context.Genres.Add(new Genre { Genrename = newGenre });
-                context.SaveChanges();
-                newGenre = "";
-                genres = new ObservableCollection<Genre>(context.Genres);
+                if (context.Genres.FirstOrDefault(g => g.Genrename == newGenre) == null)
+                {
+                    context.Genres.Add(new Genre { Genrename = newGenre });
+                    context.SaveChanges();
+                    newGenre = "";
+                    genres = new ObservableCollection<Genre>(context.Genres);
+                }
+                else
+                {
+                    dialogText = "Такой жанр уже есть.";
+                    dialog = true;
+                }
             }
-            else
+            catch
             {
-                dialogText = "Такой жанр уже есть.";
-                dialog = true;
+                MainVM.dialog = true;
+                MainVM.dialogText = "Отсутствует подключение к интернету.";
             }
         }
 
@@ -138,40 +146,46 @@ namespace kupca4.ViewModels.Views
         private bool CanBookUploadCommandExecute(object p) => true;
         private void OnBookUploadCommandExecuted(object p)
         {
-            var book = new Book(title, description, selectedGenre.GenreId, user.Username);
-            if (user.Role == 0)
-                context.Users.Find(user.Username).Role = UserRole.Author;
-            if (editBook == null)
-            {
-                context.Books.Add(book);
-            }
-            else
-            {
-                book.BookId = editBook.BookId;
-                editBook.Bookname = title;
-                editBook.Description = description;
-                editBook.GenreId = selectedGenre.GenreId;
-                editBook.Applied = BookStatus.NeedModer;
-            }
-            context.SaveChanges();
             try
             {
-                byte[] responseArray = myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _imgPath);
-                MessageBox.Show(System.Text.Encoding.ASCII.GetString(responseArray));
-                _updatePicture.BeginInit();
-                _updatePicture.CacheOption = BitmapCacheOption.OnLoad;
-                _updatePicture.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                _updatePicture.UriSource = new Uri($"http://localhost:3000/books/{book.BookId}/cover.png");
-                _updatePicture.EndInit();
+                var book = new Book(title, description, selectedGenre.GenreId, user.Username);
+                if (user.Role == 0)
+                    context.Users.Find(user.Username).Role = UserRole.Author;
+                if (editBook == null)
+                {
+                    context.Books.Add(book);
+                }
+                else
+                {
+                    book.BookId = editBook.BookId;
+                    editBook.Bookname = title;
+                    editBook.Description = description;
+                    editBook.GenreId = selectedGenre.GenreId;
+                    editBook.Applied = BookStatus.NeedModer;
+                }
+                context.SaveChanges();
+                try
+                {
+                    myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _imgPath);
+                    _updatePicture.BeginInit();
+                    _updatePicture.CacheOption = BitmapCacheOption.OnLoad;
+                    _updatePicture.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                    _updatePicture.UriSource = new Uri($"http://localhost:3000/books/{book.BookId}/cover.png");
+                    _updatePicture.EndInit();
+                }
+                catch { }
+                try
+                {
+                    myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _pdfPath);
+                }
+                catch { }
+                RestoreForm();
             }
-            catch {
-            }
-            try
+            catch
             {
-                myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _pdfPath);
+                MainVM.dialog = true;
+                MainVM.dialogText = "Отсутствует подключение к интернету.";
             }
-            catch { }
-            RestoreForm();
         }
 
         public ICommand SelectImagePathCommand { get; }

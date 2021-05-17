@@ -33,15 +33,24 @@ namespace kupca4.ViewModels.Views
             get => _rate;
             set
             {
-                Set(ref _rate, value);
-                if (context.BookRates.FirstOrDefault(b => b.BookId == _selectedBook.BookId && b.Username == user.Username) != null)
+                try
                 {
-                    context.BookRates.Find(user.Username, _selectedBook.BookId).UserRate = rate;
-                } else
-                {
-                    context.BookRates.Add(new BookRates {Username = user.Username, BookId = _selectedBook.BookId, UserRate = rate });
+                    Set(ref _rate, value);
+                    if (context.BookRates.FirstOrDefault(b => b.BookId == _selectedBook.BookId && b.Username == user.Username) != null)
+                    {
+                        context.BookRates.Find(user.Username, _selectedBook.BookId).UserRate = rate;
+                    }
+                    else
+                    {
+                        context.BookRates.Add(new BookRates { Username = user.Username, BookId = _selectedBook.BookId, UserRate = rate });
+                    }
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
+                catch
+                {
+                    mainWindowVM.dialogText = "Отсутствует подключение к интернету.";
+                    mainWindowVM.dialog = true;
+                }
             }
         }
 
@@ -59,28 +68,55 @@ namespace kupca4.ViewModels.Views
         private bool CanSwitchViewCommandExecute(object p) => true;
         private void OnSwitchViewCommandExecuted(object p)
         {
-            mainWindowVM.selectedVM = beforeVM;
+            try
+            {
+                context.Users.FirstOrDefault(u => u.Username == user.Username);
+                mainWindowVM.selectedVM = beforeVM;
+            }
+            catch
+            {
+                mainWindowVM.dialogText = "Отсутствует подключение к интернету.";
+                mainWindowVM.dialog = true;
+            }
         } 
 
         public ICommand ToFavoritesCommand { get; }
-        private bool CanToFavoritesCommandExecute(object p) => context.SavedBooks.FirstOrDefault(s => s.BookId == _selectedBook.BookId && s.Username == user.Username) == null;
         private void OnToFavoritesCommandExecuted(object p)
         {
-            context.SavedBooks.Add(new SavedBook { BookId = selectedBook.BookId, Username = user.Username });
-            context.SaveChanges();
-            userRatePanelVisibility = true;
+            try
+            {
+                if(context.SavedBooks.FirstOrDefault(s => s.BookId == _selectedBook.BookId && s.Username == user.Username) == null)
+                {
+                    context.SavedBooks.Add(new SavedBook { BookId = selectedBook.BookId, Username = user.Username });
+                    context.SaveChanges();
+                    userRatePanelVisibility = true;
+                }
+            }
+            catch
+            {
+                mainWindowVM.dialogText = "Отсутствует подключение к интернету.";
+                mainWindowVM.dialog = true;
+            }
         }
 
         public ICommand ReadBookCommand { get; }
         private bool CanReadBookCommandExecute(object p) => true;
         private void OnReadBookCommandExecuted(object p)
         {
-            var ReaderViewModel = new ReaderViewModel(_selectedBook);
-            var Reader = new Reader
+            try
             {
-                DataContext = ReaderViewModel
-            };
-            Reader.Show();
+                var ReaderViewModel = new ReaderViewModel(_selectedBook);
+                var Reader = new Reader
+                {
+                    DataContext = ReaderViewModel
+                };
+                Reader.Show();
+            }
+            catch
+            {
+                mainWindowVM.dialogText = "Отсутствует подключение к интернету.";
+                mainWindowVM.dialog = true;
+            }
         }
 
         #endregion
@@ -103,7 +139,7 @@ namespace kupca4.ViewModels.Views
             }
 
             SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted, CanSwitchViewCommandExecute);
-            ToFavoritesCommand = new LambdaCommand(OnToFavoritesCommandExecuted, CanToFavoritesCommandExecute);
+            ToFavoritesCommand = new LambdaCommand(OnToFavoritesCommandExecuted);
             ReadBookCommand = new LambdaCommand(OnReadBookCommandExecuted, CanReadBookCommandExecute);
         }
     }

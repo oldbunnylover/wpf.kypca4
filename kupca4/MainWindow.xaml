@@ -21,100 +21,110 @@
     <Window.Resources>
         <convert:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter"/>
     </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid VerticalAlignment="Top" Background="#A37C82">
-            <TextBlock WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Left"
+    <materialDesign:DialogHost CloseOnClickAway="True"
+        IsOpen="{Binding dialog}">
+        <materialDesign:DialogHost.DialogContent>
+            <Border Height="Auto" Width="Auto">
+                <StackPanel Margin="16">
+                    <TextBlock Text="{Binding dialogText}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0 10 0 0" HorizontalAlignment="Center">
+                        <Button Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                Content="Закрыть" Foreground="#6E304B" Width="90" Height="30" Command="{Binding CloseDialogCommand}" Visibility="{Binding closeDialogButtonVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid VerticalAlignment="Top" Background="#A37C82">
+                <TextBlock WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Left"
                        Text="DUCKLIBRARY" Margin="13.5,4.52,0,4.52" Foreground="#F2F1EF"/>
-            <StackPanel WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Command="{Binding WindowMinimizedCommand}">
-                    <materialDesign:PackIcon Kind="WindowMinimize" />
-                </Button>
-                <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Command="{Binding WindowMaximizeCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}}">
-                    <materialDesign:PackIcon Kind="WindowMaximize"/>
-                </Button>
-                <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent">
-                    <materialDesign:PackIcon Kind="WindowClose" />
-                    <Button.Command>
-                        <cmd:AppClose/>
-                    </Button.Command>
-                </Button>
+                <StackPanel WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Command="{Binding WindowMinimizedCommand}">
+                        <materialDesign:PackIcon Kind="WindowMinimize" />
+                    </Button>
+                    <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Command="{Binding WindowMaximizeCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}}">
+                        <materialDesign:PackIcon Kind="WindowMaximize"/>
+                    </Button>
+                    <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent">
+                        <materialDesign:PackIcon Kind="WindowClose" />
+                        <Button.Command>
+                            <cmd:AppClose/>
+                        </Button.Command>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <StackPanel Grid.Row="1" HorizontalAlignment="Left" Background="#A37C82">
+                <ListView>
+                    <ListViewItem Foreground="#F2F1EF" Margin="0,0,0,25" Cursor="Hand" Visibility="Hidden">
+                        <materialDesign:PackIcon Kind="Magnify" Width="40" Height="40"/>
+                    </ListViewItem>
+                    <ListViewItem Margin="0,0,0,25" Cursor="Hand">
+                        <ListViewItem.ToolTip>
+                            <ToolTip Placement="Left" Content="Каталог"  HorizontalOffset="5" 
+             VerticalOffset="10"/>
+                        </ListViewItem.ToolTip>
+                        <Image Source="Styles/img/book.ico"  Width="40" Height="40"/>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding SwitchViewCommand}" CommandParameter="AllBooks"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ListViewItem>
+                    <ListViewItem Foreground="#F2F1EF" Margin="0,0,0,25" Cursor="Hand">
+                        <ListViewItem.ToolTip>
+                            <ToolTip Placement="Left" Content="Личная библиотека"  HorizontalOffset="5" 
+             VerticalOffset="10"/>
+                        </ListViewItem.ToolTip>
+                        <materialDesign:PackIcon Kind="LibraryShelves" Width="40" Height="40"/>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding SwitchViewCommand}" CommandParameter="MyBooks"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ListViewItem>
+                    <ListViewItem Margin="0,0,0,25" Foreground="#F2F1EF" Cursor="Hand" Visibility="{Binding uploadBookMenuItemVisability, Converter={StaticResource BooleanToHiddenVisibilityConverter}}">
+                        <ListViewItem.ToolTip>
+                            <ToolTip Placement="Left" Content="Загрузить книгу"  HorizontalOffset="5" 
+             VerticalOffset="10"/>
+                        </ListViewItem.ToolTip>
+                        <Image Source="Styles/img/write.ico"  Width="40" Height="40"/>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding SwitchViewCommand}" CommandParameter="BookUpload"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ListViewItem>
+                    <ListViewItem Margin="0,0,0,25" Foreground="#F2F1EF" Cursor="Hand" Visibility="{Binding contrloPaneMenuItemVisability, Converter={StaticResource BooleanToHiddenVisibilityConverter}}">
+                        <ListViewItem.ToolTip>
+                            <ToolTip Placement="Left" Content="Панель управления"  HorizontalOffset="5" 
+             VerticalOffset="10"/>
+                        </ListViewItem.ToolTip>
+                        <materialDesign:PackIcon Kind="Tools" Width="40" Height="40"/>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding SwitchViewCommand}" CommandParameter="User"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ListViewItem>
+                    <ListViewItem Foreground="#F2F1EF">
+                        <ListViewItem.ToolTip>
+                            <ToolTip Placement="Left" Content="Cменить пользователя"  HorizontalOffset="5" 
+             VerticalOffset="10"/>
+                        </ListViewItem.ToolTip>
+                        <materialDesign:PackIcon Kind="ExitToApp" Width="40" Height="40"/>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding SwitchUserCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ListViewItem>
+                </ListView>
             </StackPanel>
+            <ContentControl Grid.Row="1" Content="{Binding selectedVM}" Margin="56,0,0,0"/>
         </Grid>
-        <StackPanel Grid.Row="1" HorizontalAlignment="Left" Background="#A37C82">
-            <ListView>
-                <ListViewItem Foreground="#F2F1EF" Margin="0,0,0,25" Cursor="Hand">
-                    <ListViewItem.ToolTip>
-                        <ToolTip Placement="Left" Content="Поиск"  HorizontalOffset="5" 
-             VerticalOffset="10"/>
-                    </ListViewItem.ToolTip>
-                    <materialDesign:PackIcon Kind="Magnify" Width="40" Height="40"/>
-                </ListViewItem>
-                <ListViewItem Margin="0,0,0,25" Cursor="Hand">
-                    <ListViewItem.ToolTip>
-                        <ToolTip Placement="Left" Content="Каталог"  HorizontalOffset="5" 
-             VerticalOffset="10"/>
-                    </ListViewItem.ToolTip>
-                    <Image Source="Styles/img/book.ico"  Width="40" Height="40"/>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding SwitchViewCommand}" CommandParameter="AllBooks"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ListViewItem>
-                <ListViewItem Foreground="#F2F1EF" Margin="0,0,0,25" Cursor="Hand">
-                    <ListViewItem.ToolTip>
-                        <ToolTip Placement="Left" Content="Личная библиотека"  HorizontalOffset="5" 
-             VerticalOffset="10"/>
-                    </ListViewItem.ToolTip>
-                    <materialDesign:PackIcon Kind="LibraryShelves" Width="40" Height="40"/>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding SwitchViewCommand}" CommandParameter="MyBooks"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ListViewItem>
-                <ListViewItem Margin="0,0,0,25" Foreground="#F2F1EF" Cursor="Hand" Visibility="{Binding uploadBookMenuItemVisability, Converter={StaticResource BooleanToHiddenVisibilityConverter}}">
-                    <ListViewItem.ToolTip>
-                        <ToolTip Placement="Left" Content="Загрузить книгу"  HorizontalOffset="5" 
-             VerticalOffset="10"/>
-                    </ListViewItem.ToolTip>
-                    <Image Source="Styles/img/write.ico"  Width="40" Height="40"/>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding SwitchViewCommand}" CommandParameter="BookUpload"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ListViewItem>
-                <ListViewItem Margin="0,0,0,25" Foreground="#F2F1EF" Cursor="Hand" Visibility="{Binding contrloPaneMenuItemVisability, Converter={StaticResource BooleanToHiddenVisibilityConverter}}">
-                    <ListViewItem.ToolTip>
-                        <ToolTip Placement="Left" Content="Панель управления"  HorizontalOffset="5" 
-             VerticalOffset="10"/>
-                    </ListViewItem.ToolTip>
-                    <materialDesign:PackIcon Kind="Tools" Width="40" Height="40"/>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding SwitchViewCommand}" CommandParameter="User"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ListViewItem>
-                <ListViewItem Foreground="#F2F1EF">
-                    <ListViewItem.ToolTip>
-                        <ToolTip Placement="Left" Content="Cменить пользователя"  HorizontalOffset="5" 
-             VerticalOffset="10"/>
-                    </ListViewItem.ToolTip>
-                    <materialDesign:PackIcon Kind="ExitToApp" Width="40" Height="40"/>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding SwitchUserCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ListViewItem>
-            </ListView>
-        </StackPanel>
-        <ContentControl Grid.Row="1" Content="{Binding selectedVM}" Margin="56,0,0,0"/>
-    </Grid>
+    </materialDesign:DialogHost>
 </Window>

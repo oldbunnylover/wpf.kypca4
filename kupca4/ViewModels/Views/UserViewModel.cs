@@ -17,6 +17,8 @@ namespace kupca4.ViewModels.Views
         private readonly User user;
         private ViewModel _selectedVM;
         private bool _dialog = false;
+        private bool _noEthernetDialog = false;
+        private string _noEthernetDialogText;
         private bool _searchResults = false;
         private bool _isAdmin;
         private User _selectedModer;
@@ -39,6 +41,18 @@ namespace kupca4.ViewModels.Views
             set => Set(ref _dialog, value);
         }
 
+        public bool noEthernetDialog
+        {
+            get => _noEthernetDialog;
+            set => Set(ref _noEthernetDialog, value);
+        }
+
+        public string noEthernetDialogText
+        {
+            get => _noEthernetDialogText;
+            set => Set(ref _noEthernetDialogText, value);
+        }
+
         public bool isAdmin
         {
             get => _isAdmin;
@@ -55,9 +69,18 @@ namespace kupca4.ViewModels.Views
             get => _searchString;
             set
             {
-                Set(ref _searchString, value);
-                searchResults = true;
-                moderList = new ObservableCollection<User>(context.Users.Where(u => u.Username.StartsWith(value) && u.Role != UserRole.Moderator && u.Role != UserRole.Admin).Take(5));
+                try
+                {
+                    Set(ref _searchString, value);
+                    searchResults = true;
+                    moderList = new ObservableCollection<User>(context.Users.Where(u => u.Username.StartsWith(value) && u.Role != UserRole.Moderator && u.Role != UserRole.Admin).Take(5));
+                }
+                catch
+                {
+                    dialog = false;
+                    noEthernetDialog = true;
+                    noEthernetDialogText = "Отсутствует подключение к интернету.";
+                }
             }
         }
 
@@ -80,17 +103,26 @@ namespace kupca4.ViewModels.Views
         public ICommand SwitchViewCommand { get; }
         private void OnSwitchViewCommandExecuted(object p)
         {
-            switch (p.ToString())
+            try
             {
-                case "BooksApply":
-                    selectedVM = new BooksApplyViewModel(MainVM, user);
-                    break;
-                case "AuthorUnblock":
-                    selectedVM = new UnblockUserViewModel(MainVM, user);
-                    break;
-                case "NewModerator":
-                    dialog = true;
-                    break;
+                context.Users.FirstOrDefault(u => u.Username == user.Username);
+                switch (p.ToString())
+                {
+                    case "BooksApply":
+                        selectedVM = new BooksApplyViewModel(MainVM, user, this);
+                        break;
+                    case "AuthorUnblock":
+                        selectedVM = new UnblockUserViewModel(MainVM, user, this);
+                        break;
+                    case "NewModerator":
+                        dialog = true;
+                        break;
+                }
+            }
+            catch
+            {
+                noEthernetDialog = true;
+                noEthernetDialogText = "Отсутствует подключение к интернету.";
             }
         }
 
@@ -104,11 +136,22 @@ namespace kupca4.ViewModels.Views
         private bool CanNewModeratorCommandExecute(object p) => selectedModer != null;
         private void OnNewModeratorCommandExecuted(object p)
         {
-            selectedModer.Role = UserRole.Moderator;
-            context.SaveChanges();
-            dialog = false;
-            searchString = "";
+            try
+            {
+                selectedModer.Role = UserRole.Moderator;
+                context.SaveChanges();
+                dialog = false;
+                searchString = "";
+            }
+            catch
+            {
+                noEthernetDialog = true;
+                noEthernetDialogText = "Отсутствует подключение к интернету.";
+            }
         }
+
+        public ICommand CloseNoEthernetDialogCommand { get; }
+        private void OnCloseNoEthernetDialogCommandExecuted(object p) => noEthernetDialog = false;
 
         #endregion
 
@@ -121,6 +164,7 @@ namespace kupca4.ViewModels.Views
 
             SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted);
             CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted);
+            CloseNoEthernetDialogCommand = new LambdaCommand(OnCloseNoEthernetDialogCommandExecuted);
             NewModeratorCommand = new LambdaCommand(OnNewModeratorCommandExecuted, CanNewModeratorCommandExecute);
         }
     }

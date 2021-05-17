@@ -35,15 +35,23 @@ namespace kupca4.ViewModels.Views
             get => _sortingSelected;
             set
             {
-                Set(ref _sortingSelected, value);
-                switch (sortingSelected)
+                try
                 {
-                    case "по новизне":
-                        booksList = new ObservableCollection<Book>(context.Books.OrderByDescending(b => b.BookId).Where(b => b.Hidden == false && b.Applied == BookStatus.Applied));
-                        break;
-                    case "по алфавиту":
-                        booksList = new ObservableCollection<Book>(context.Books.OrderBy(b => b.Bookname).Where(b => b.Hidden == false && b.Applied == BookStatus.Applied));
-                        break;
+                    Set(ref _sortingSelected, value);
+                    switch (value)
+                    {
+                        case "по новизне":
+                            booksList = new ObservableCollection<Book>(context.Books.OrderByDescending(b => b.BookId).Where(b => b.Hidden == false && b.Applied == BookStatus.Applied));
+                            break;
+                        case "по алфавиту":
+                            booksList = new ObservableCollection<Book>(context.Books.OrderBy(b => b.Bookname).Where(b => b.Hidden == false && b.Applied == BookStatus.Applied));
+                            break;
+                    }
+                }
+                catch
+                {
+                    parentVM.dialog = true;
+                    parentVM.dialogText = "Отсутствует подключение к интернету.";
                 }
             }
         }
@@ -62,18 +70,26 @@ namespace kupca4.ViewModels.Views
         public ICommand SwitchViewCommand { get; }
         private void OnSwitchViewCommandExecuted(object p)
         {
-            parentVM.selectedVM = new SelectedBookViewModel(user, (int)p, parentVM, this);
+            try
+            {
+                parentVM.selectedVM = new SelectedBookViewModel(user, (int)p, parentVM, this);
+            }
+            catch
+            {
+                parentVM.dialog = true;
+                parentVM.dialogText = "Отсутствует подключение к интернету.";
+            }
         }
 
         #endregion
 
 
-        public AllBooksViewModel(User user, MainWindowViewModel vm, string sorting = "по новизне")
+        public AllBooksViewModel(User user, MainWindowViewModel vm)
         {
             this.user = user;
             parentVM = vm;
 
-            sortingSelected = sorting;
+            sortingSelected = "по новизне";
 
             SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted);
         }

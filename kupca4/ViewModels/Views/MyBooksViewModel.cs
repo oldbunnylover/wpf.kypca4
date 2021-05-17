@@ -41,37 +41,77 @@ namespace kupca4.ViewModels.Views
         public ICommand EditBookCommand { get; }
         private void OnEditBookCommandExecuted(object p)
         {
-            MainWindowVM.selectedVM = new BookUploadViewModel(user, MainWindowVM, (int)p);
+            try
+            {
+                MainWindowVM.selectedVM = new BookUploadViewModel(user, MainWindowVM, (int)p);
+            }
+            catch
+            {
+                MainWindowVM.dialogText = "Отсутствует подключение к интернету.";
+                MainWindowVM.dialog = true;
+            }
         }
 
         public ICommand HideBookCommand { get; }
         private void OnHideBookCommandExecuted(object p)
         {
-            context.Books.Find((int)p).Hidden = true;
-            context.SaveChanges();
-            uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
+            try
+            {
+                context.Books.Find((int)p).Hidden = true;
+                context.SaveChanges();
+                uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
+            }
+            catch
+            {
+                MainWindowVM.dialogText = "Отсутствует подключение к интернету.";
+                MainWindowVM.dialog = true;
+            }
         }
 
         public ICommand ShowBookCommand { get; }
         private void OnShowBookCommandExecuted(object p)
         {
-            context.Books.Find((int)p).Hidden = false;
-            context.SaveChanges();
-            uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
+            try
+            {
+                context.Books.Find((int)p).Hidden = false;
+                context.SaveChanges();
+                uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
+            }
+            catch
+            {
+                MainWindowVM.dialogText = "Отсутствует подключение к интернету.";
+                MainWindowVM.dialog = true;
+            }
         }
 
         public ICommand RemoveFavoriteCommand { get; }
         private void OnRemoveFavoriteCommandExecuted(object p)
         {
-            context.SavedBooks.Remove(context.SavedBooks.Find(user.Username, (int)p));
-            context.SaveChanges();
-            likedBooksList = new ObservableCollection<Book>(context.Books.Where(b => context.SavedBooks.Where(s => s.Username == user.Username).Select(s => s.BookId).Contains(b.BookId)));
+            try
+            {
+                context.SavedBooks.Remove(context.SavedBooks.Find(user.Username, (int)p));
+                context.SaveChanges();
+                likedBooksList = new ObservableCollection<Book>(context.Books.Where(b => context.SavedBooks.Where(s => s.Username == user.Username).Select(s => s.BookId).Contains(b.BookId)));
+            }
+            catch
+            {
+                MainWindowVM.dialogText = "Отсутствует подключение к интернету.";
+                MainWindowVM.dialog = true;
+            }
         }
 
         public ICommand SwitchViewCommand { get; }
         private void OnSwitchViewCommandExecuted(object p)
         {
-            MainWindowVM.selectedVM = new SelectedBookViewModel(user, (int)p, MainWindowVM, this);
+            try
+            {
+                MainWindowVM.selectedVM = new SelectedBookViewModel(user, (int)p, MainWindowVM, this);
+            }
+            catch
+            {
+                MainWindowVM.dialogText = "Отсутствует подключение к интернету.";
+                MainWindowVM.dialog = true;
+            }
         }
 
         #endregion

@@ -23,7 +23,21 @@
                 </StackPanel>
             </Border>
         </materialDesign:DialogHost.DialogContent>
-        <Grid>
+        <materialDesign:DialogHost CloseOnClickAway="True"
+        IsOpen="{Binding noEthernetDialog}" OverlayBackground="Transparent">
+            <materialDesign:DialogHost.DialogContent>
+                <Border Height="Auto" Width="Auto">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="{Binding noEthernetDialogText}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0 10 0 0" HorizontalAlignment="Center">
+                            <Button Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                Content="Закрыть" Foreground="#6E304B" Width="90" Height="30" Command="{Binding CloseNoEthernetDialogCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </materialDesign:DialogHost.DialogContent>
+
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="56"/>
             <RowDefinition Height="50"/>
@@ -42,5 +56,6 @@
         </Menu>
         <ContentControl Grid.Row="2" Content="{Binding selectedVM}"/>
     </Grid>
+    </materialDesign:DialogHost>
     </materialDesign:DialogHost>
 </UserControl>

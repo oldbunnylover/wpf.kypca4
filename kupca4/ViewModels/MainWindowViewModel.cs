@@ -16,6 +16,9 @@ namespace kupca4.ViewModels
         private WindowState _windowState = WindowState.Normal;
         private bool _uploadBookMenuItemVisability;
         private bool _contrloPaneMenuItemVisability;
+        private bool _dialog = false;
+        private string _dialogText;
+
         #endregion
 
         #region public fields
@@ -41,6 +44,18 @@ namespace kupca4.ViewModels
         {
             get => _contrloPaneMenuItemVisability;
         }
+
+        public bool dialog
+        {
+            get => _dialog;
+            set => Set(ref _dialog, value);
+        }
+
+        public string dialogText
+        {
+            get => _dialogText;
+            set => Set(ref _dialogText, value);
+        }
         #endregion
 
         #region Commands
@@ -62,23 +77,35 @@ namespace kupca4.ViewModels
             (p as Window).Close();
         }
 
+        public ICommand CloseDialogCommand { get; }
+        private void OnCloseDialogCommandExecuted(object p) => dialog = false;
+
+
         public ICommand SwitchViewCommand { get; }
         private void OnSwitchViewCommandExecuted(object p)
         {
-            switch (p.ToString())
+            try
             {
-                case "BookUpload":
-                    selectedVM = new BookUploadViewModel(user, this);
-                    break;
-                case "AllBooks":
-                    selectedVM = new AllBooksViewModel(user, this);
-                    break;
-                case "MyBooks":
-                    selectedVM = new MyBooksViewModel(user, this);
-                    break;
-                case "User":
-                    selectedVM = new UserViewModel(user, this);
-                    break;
+                switch (p.ToString())
+                {
+                    case "BookUpload":
+                        selectedVM = new BookUploadViewModel(user, this);
+                        break;
+                    case "AllBooks":
+                        selectedVM = new AllBooksViewModel(user, this);
+                        break;
+                    case "MyBooks":
+                        selectedVM = new MyBooksViewModel(user, this);
+                        break;
+                    case "User":
+                        selectedVM = new UserViewModel(user, this);
+                        break;
+                }
+            }
+            catch
+            {
+                dialogText = "Отсутствует подключение к интернету.";
+                dialog = true;
             }
         }
 
@@ -95,6 +122,7 @@ namespace kupca4.ViewModels
             WindowMaximizeCommand = new LambdaCommand(OnWindowMaximizeCommandExecuted);
             SwitchUserCommand = new LambdaCommand(OnSwitchUserCommandExecuted);
             SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted);
+            CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted);
 
             if (view == "MyBooks")
                 selectedVM = new MyBooksViewModel(user, this);
