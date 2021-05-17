@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using kupca4.DB;
@@ -21,6 +22,8 @@ namespace kupca4.ViewModels
         private string _loginPassword;
         private bool _loading = false;
         private bool _dialog = false;
+        private bool _errorMsg = false;
+        private bool _closeDialogButtonVisibility = false;
         private string _dialogText;
         private string _passError;
         private bool _passErrorVisibility = false;
@@ -33,6 +36,18 @@ namespace kupca4.ViewModels
         {
             get => _passError;
             set => Set(ref _passError, value);
+        }
+
+        public bool errorMsg
+        {
+            get => _errorMsg;
+            set => Set(ref _errorMsg, value);
+        }
+
+        public bool closeDialogButtonVisibility
+        {
+            get => _closeDialogButtonVisibility;
+            set => Set(ref _closeDialogButtonVisibility, value);
         }
 
         public bool passErrorVisibility
@@ -76,7 +91,7 @@ namespace kupca4.ViewModels
                     passError = "Пароль должен состоять максимум из 25 символов.";
                     passErrorVisibility = true;
                 }
-                if (new Regex("[^a-zA-Z0-9!?.@]+$").IsMatch(value))
+                if (!new Regex("^[a-zA-Z0-9!?.@]+$").IsMatch(value))
                 {
                     passError = "Пароль может содержать только латиницу, цифры и специальные символы('!', '?', '.', '@')";
                     passErrorVisibility = true;
@@ -120,7 +135,7 @@ namespace kupca4.ViewModels
 
         public void UsernameInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = new Regex("[^a-zA-Z]$").IsMatch(e.Text);
+            e.Handled = new Regex("[^a-zA-Z0-9]$").IsMatch(e.Text);
         }
 
         public void SurnameNameInput(object sender, TextCompositionEventArgs e)
@@ -129,6 +144,8 @@ namespace kupca4.ViewModels
         }
 
         #endregion
+
+        #region Checks
 
         private bool ServerCheck()
         {
@@ -158,6 +175,27 @@ namespace kupca4.ViewModels
             return false;
         }
 
+        async void DataBaseAsync()
+        {
+            await Task.Run(() => {
+                try
+                {
+                    context.Users.FirstOrDefault(u => u.Username == "1");
+                    errorMsg = false;
+                    closeDialogButtonVisibility = true;
+                }
+                catch
+                {
+                    dialogText = "Отсутствует подключение к интернету.";
+                    errorMsg = true;
+                    closeDialogButtonVisibility = false;
+                    dialog = true;
+                }
+            });
+        }
+
+        #endregion
+
         #region Commands
 
         public ICommand RegisterCommand { get; }
@@ -168,24 +206,33 @@ namespace kupca4.ViewModels
         {
             if (ServerCheck())
             {
-                if (context.Users.FirstOrDefault(u => u.Username == registerUsername) == null)
+                try
                 {
-                    User user = new User(name, surname, registerUsername, registerPassword);
-                    context.Users.Add(user);
-                    context.SaveChanges();
-                    var MainWindowViewModel = new MainWindowViewModel(user, "AllBooks");
-                    var MainWindow = new MainWindow
+                    if (context.Users.FirstOrDefault(u => u.Username == registerUsername) == null)
                     {
-                        DataContext = MainWindowViewModel
-                    };
-                    MainWindow.Show();
-                    (p as Window).Close();
+                        User user = new User(name, surname, registerUsername, registerPassword);
+                        context.Users.Add(user);
+                        context.SaveChanges();
+                        var MainWindowViewModel = new MainWindowViewModel(user, "AllBooks");
+                        var MainWindow = new MainWindow
+                        {
+                            DataContext = MainWindowViewModel
+                        };
+                        MainWindow.Show();
+                        (p as Window).Close();
+                    }
+                    else
+                    {
+                        dialogText = "Пользователь с данным псевдонимом уже зарегистрирован.";
+                        dialog = true;
+                    }
                 }
-                else
+                catch
                 {
-                    dialogText = "Пользователь с данным псевдонимом уже зарегистрирован.";
+                    dialogText = "Отсутствует подключение к интернету.";
                     dialog = true;
                 }
+               
             }
         }
 
@@ -195,21 +242,29 @@ namespace kupca4.ViewModels
         {
             if (ServerCheck())
             {
-                if (context.Users.FirstOrDefault(u => u.Username == loginUsername && u.Password == User.getHash(loginPassword)) != null)
+                try
                 {
-                    User user = context.Users.FirstOrDefault(u => u.Username == loginUsername);
-                    var MainWindowViewModel = new MainWindowViewModel(user, "MyBooks");
-                    var MainWindow = new MainWindow
+                    if (context.Users.FirstOrDefault(u => u.Username == loginUsername && u.Password == User.getHash(loginPassword)) != null)
                     {
-                        DataContext = MainWindowViewModel
-                    };
-                    MainWindow.Show();
-                    (p as Window).Close();
+                        User user = context.Users.FirstOrDefault(u => u.Username == loginUsername);
+                        var MainWindowViewModel = new MainWindowViewModel(user, "MyBooks");
+                        var MainWindow = new MainWindow
+                        {
+                            DataContext = MainWindowViewModel
+                        };
+                        MainWindow.Show();
+                        (p as Window).Close();
+                    }
+                    else
+                    {
+                        loading = false;
+                        dialogText = "Неверный логин или пароль.";
+                        dialog = true;
+                    }
                 }
-                else
+                catch
                 {
-                    loading = false;
-                    dialogText = "Неверный логин или пароль.";
+                    dialogText = "Отсутствует подключение к интернету.";
                     dialog = true;
                 }
             }
@@ -218,16 +273,28 @@ namespace kupca4.ViewModels
         public ICommand CloseDialogCommand { get; }
         private void OnCloseDialogCommandExecuted(object p) => dialog = false;
 
+        public ICommand TryAgainCommand { get; }
+        private void OnTryAgainCommandExecuted(object p)
+        {
+            dialog = false;
+            DataBaseAsync();
+        }
+
+
         #endregion
 
         public LoginRegisterViewModel()
         {
             #region Commands
+
             RegisterCommand = new LambdaCommand(OnRegisterCommandExecuted, CanRegisterCommandExecute);
             CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted);
+            TryAgainCommand = new LambdaCommand(OnTryAgainCommandExecuted);
             LoginCommand = new LambdaCommand(OnLoginCommandExecuted, CanLoginCommandExecute);
 
             #endregion
+
+            DataBaseAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using kupca4.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
@@ -8,7 +9,6 @@ namespace kupca4.DB
     {
         public KP_LibraryContext()
         {
-            Database.EnsureCreated();
         }
 
         public KP_LibraryContext(DbContextOptions<KP_LibraryContext> options)
