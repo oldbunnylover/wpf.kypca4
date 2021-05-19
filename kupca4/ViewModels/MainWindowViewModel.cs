@@ -2,6 +2,9 @@
 using kupca4.Helpers.Commands;
 using kupca4.ViewModels.Base;
 using kupca4.ViewModels.Views;
+using MaterialDesignThemes.Wpf;
+using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -12,6 +15,8 @@ namespace kupca4.ViewModels
         #region private fields
 
         private readonly User user;
+        private SnackbarMessageQueue Queue = new SnackbarMessageQueue();
+
         private ViewModel _selectedVM;
         private WindowState _windowState = WindowState.Normal;
         private bool _uploadBookMenuItemVisability;
@@ -55,6 +60,12 @@ namespace kupca4.ViewModels
         {
             get => _dialogText;
             set => Set(ref _dialogText, value);
+        }
+
+        public SnackbarMessageQueue queue
+        {
+            get => Queue;
+            set => Set(ref Queue, value);
         }
         #endregion
 
@@ -117,6 +128,12 @@ namespace kupca4.ViewModels
 
             _uploadBookMenuItemVisability = user.Role != UserRole.Moderator && user.Blocked == false;
             _contrloPaneMenuItemVisability = user.Role != UserRole.User && user.Role != UserRole.Author;
+
+            TimeSpan durability = new TimeSpan(0, 0, 5);
+
+            using (KP_LibraryContext context = new KP_LibraryContext())
+                if (context.Books.FirstOrDefault(b => b.AuthorName == user.Username && b.Applied == BookStatus.Canceled) != null)
+                    Queue.Enqueue("Одна или несколько ваших книг не прошли модерацию.", null, null, null, false, false, durability);
 
             WindowMinimizedCommand = new LambdaCommand(OnWindowMinimizedCommandExecuted);
             WindowMaximizeCommand = new LambdaCommand(OnWindowMaximizeCommandExecuted);

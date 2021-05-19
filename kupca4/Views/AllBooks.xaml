@@ -38,11 +38,6 @@
                                 <ColumnDefinition Width="170"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Border Grid.ColumnSpan="2" BorderBrush="#E7E4E3" BorderThickness="1" CornerRadius="10">
-                                <Border.Effect>
-                                    <DropShadowEffect />
-                                </Border.Effect>
-                            </Border>
                             <Rectangle Grid.ColumnSpan="2" RadiusX="15" RadiusY="15" Fill="#E7E4E3"/>
                             <Image Source="{Binding BookId, Converter={StaticResource IDtoImageConverter}}" Margin="18 10 18 10" Cursor="Hand">
                                 <i:Interaction.Triggers>
@@ -53,7 +48,7 @@
                                 </i:Interaction.Triggers>
                             </Image>
                             <StackPanel Grid.Column="1">
-                                <TextBlock Text="{Binding Bookname}" FontSize="20" Margin="5 8 0 0" HorizontalAlignment="Left" Cursor="Hand">
+                                <TextBlock Text="{Binding Bookname}" FontSize="20" Margin="5 8 0 0" HorizontalAlignment="Left" Cursor="Hand" Foreground="#6E304B">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                                             <i:InvokeCommandAction Command="{Binding ElementName=ListBoxBook, Path=DataContext.SwitchViewCommand}"
@@ -61,7 +56,7 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TextBlock>
-                                <TextBlock Text="{Binding AuthorName, Converter={StaticResource NicktoFullNameConverter}}" FontSize="12" Foreground="#6E304B" Margin="5 0 0 5"/>
+                                <TextBlock Text="{Binding AuthorName, Converter={StaticResource NicktoFullNameConverter}}" FontSize="12" Margin="5 0 0 5"/>
                                 <TextBlock TextWrapping="Wrap" FontSize="10" Margin="5 7 10 5" Text="{Binding Description}" Height="106" />
                             </StackPanel>
                         </Grid>

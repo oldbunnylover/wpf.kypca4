@@ -114,7 +114,7 @@ namespace kupca4.ViewModels.Views
 
         public void GenreInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = new Regex("[^а-яА-я]$").IsMatch(e.Text);
+            e.Handled = new Regex("[^а-яА-яa-zA-Z]$").IsMatch(e.Text);
         }
 
         #region commands
@@ -149,7 +149,7 @@ namespace kupca4.ViewModels.Views
         private void OnCloseDialogCommandExecuted(object p) => dialog = false;
 
         public ICommand BookUploadCommand { get; }
-        private bool CanBookUploadCommandExecute(object p) => title?.Length > 1 && title?.Length < 65 && description?.Length > 1 
+        private bool CanBookUploadCommandExecute(object p) => title?.Length > 1 && title?.Length < 65 && description?.Length > 1 && selectedGenreName?.Length > 0
             && description?.Length < 1851 && (editBook != null || _imgPath?.Length > 0) && (editBook != null || _pdfPath?.Length > 0);
         private void OnBookUploadCommandExecuted(object p)
         {

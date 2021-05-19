@@ -13,6 +13,8 @@
              d:Background="#F2F1EF">
     <UserControl.Resources>
         <convert:IDtoImageConverter x:Key="IDtoImageConverter"/>
+        <convert:AppliedStatusToBrushConverter x:Key="AppliedStatusToBrushConverter"/>
+        <convert:BookStatustoReadebleStatus x:Key="BookStatustoReadebleStatus"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -93,8 +95,12 @@
                                 <RowDefinition Height="115"/>
                                 <RowDefinition Height="80"/>
                             </Grid.RowDefinitions>
+                            <Grid.ToolTip>
+                                <ToolTip Placement="Mouse" Content="{Binding Applied, Converter={StaticResource BookStatustoReadebleStatus}}" HorizontalOffset="20"/>
+                            </Grid.ToolTip>
                             <Image Grid.RowSpan="2" Source="{Binding BookId, Converter={StaticResource IDtoImageConverter}}" Width="140" Stretch="UniformToFill"/>
                             <Rectangle Grid.RowSpan="2" Fill="#B2080808" Visibility="{Binding Hidden, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <Rectangle Grid.RowSpan="2" Fill="{Binding Applied, Converter={StaticResource AppliedStatusToBrushConverter}}"/>
                             <StackPanel Grid.Row="1" Background="#9922161C" Margin="0,10,0,0">
                                 <TextBlock Text="{Binding Bookname, StringFormat='&quot;\{0\}&quot;'}" FontSize="10" Foreground="#F2F1EF" 
                                MaxHeight="36" Width="128" TextWrapping="Wrap" Margin="0 7 0 0" TextAlignment="Center"/>
