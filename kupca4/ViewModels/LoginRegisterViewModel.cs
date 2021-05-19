@@ -151,7 +151,8 @@ namespace kupca4.ViewModels
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:3000/");
+                //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:3000/");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://192.168.0.100:3000/");
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -178,13 +179,9 @@ namespace kupca4.ViewModels
         async void DataBaseAsync()
         {
             await Task.Run(() => {
-                try
-                {
-                    context.Users.FirstOrDefault(u => u.Username == "1");
-                    errorMsg = false;
-                    closeDialogButtonVisibility = true;
-                }
-                catch
+                errorMsg = false;
+                closeDialogButtonVisibility = true;
+                if (!new KP_LibraryContext(true).connection)
                 {
                     dialogText = "Отсутствует подключение к интернету.";
                     errorMsg = true;

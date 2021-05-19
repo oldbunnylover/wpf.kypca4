@@ -7,8 +7,26 @@ namespace kupca4.DB
 {
     public partial class KP_LibraryContext : DbContext
     {
+        public bool connection = true;
+
         public KP_LibraryContext()
         {
+        }
+
+        public KP_LibraryContext(bool create)
+        {
+            if(create)
+            {
+                try
+                {
+                    Database.EnsureCreated();
+                }
+                catch
+                {
+                    connection = false;
+                }
+            }
+                
         }
 
         public KP_LibraryContext(DbContextOptions<KP_LibraryContext> options)

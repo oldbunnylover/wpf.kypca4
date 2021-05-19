@@ -115,7 +115,7 @@ namespace kupca4.ViewModels
         {
             this.user = user;
 
-            _uploadBookMenuItemVisability = user.Role != UserRole.Moderator;
+            _uploadBookMenuItemVisability = user.Role != UserRole.Moderator && user.Blocked == false;
             _contrloPaneMenuItemVisability = user.Role != UserRole.User && user.Role != UserRole.Author;
 
             WindowMinimizedCommand = new LambdaCommand(OnWindowMinimizedCommandExecuted);

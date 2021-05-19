@@ -12,7 +12,7 @@
              d:DesignHeight="585" d:DesignWidth="864"
              d:Background="#F2F1EF">
     <materialDesign:DialogHost CloseOnClickAway="True"
-        IsOpen="{Binding dialog}">
+        IsOpen="{Binding dialog}" OverlayBackground="Transparent">
         <materialDesign:DialogHost.DialogContent>
             <Border Height="Auto" Width="Auto">
                 <StackPanel Margin="16">

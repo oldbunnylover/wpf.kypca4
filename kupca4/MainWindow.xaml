@@ -29,7 +29,7 @@
                     <TextBlock Text="{Binding dialogText}"/>
                     <StackPanel Orientation="Horizontal" Margin="0 10 0 0" HorizontalAlignment="Center">
                         <Button Style="{StaticResource MaterialDesignFlatAccentButton}"
-                                Content="Закрыть" Foreground="#6E304B" Width="90" Height="30" Command="{Binding CloseDialogCommand}" Visibility="{Binding closeDialogButtonVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                Content="Закрыть" Foreground="#6E304B" Width="90" Height="30" Command="{Binding CloseDialogCommand}"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
