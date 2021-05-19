@@ -18,6 +18,7 @@ namespace kupca4.ViewModels.Views
 
         private ObservableCollection<Book> _uploadedBooksList;
         private ObservableCollection<Book> _likedBooksList;
+        private bool _uploadedBooksVisibility;
 
         #endregion
 
@@ -33,6 +34,12 @@ namespace kupca4.ViewModels.Views
         {
             get => _likedBooksList;
             set => Set(ref _likedBooksList, value);
+        }
+
+        public bool uploadedBooksVisibility
+        {
+            get => _uploadedBooksVisibility;
+            set => Set(ref _uploadedBooksVisibility, value);
         }
 
         #endregion
@@ -122,7 +129,9 @@ namespace kupca4.ViewModels.Views
             MainWindowVM = vm;
             likedBooksList = new ObservableCollection<Book>(context.Books.Where(b => context.SavedBooks.Where(s => s.Username == user.Username).Select(s => s.BookId).Contains(b.BookId)));
             uploadedBooksList = new ObservableCollection<Book>(context.Books.Where(b => b.User == user));
-            
+
+            _uploadedBooksVisibility = _uploadedBooksList.Count() > 0;
+
             EditBookCommand = new LambdaCommand(OnEditBookCommandExecuted);
             HideBookCommand = new LambdaCommand(OnHideBookCommandExecuted);
             ShowBookCommand = new LambdaCommand(OnShowBookCommandExecuted);

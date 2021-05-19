@@ -24,6 +24,7 @@ namespace kupca4.ViewModels.Views
         private User _selectedModer;
         private ObservableCollection<User> _moderList;
         private string _searchString;
+        private int _menuHeight;
 
         #endregion
 
@@ -62,6 +63,12 @@ namespace kupca4.ViewModels.Views
         {
             get => _searchResults;
             set => Set(ref _searchResults, value);
+        }
+
+        public int menuHeight
+        {
+            get => _menuHeight;
+            set => Set(ref _menuHeight, value);
         }
 
         public string searchString
@@ -161,6 +168,13 @@ namespace kupca4.ViewModels.Views
             this.MainVM = MainVM;
             _selectedVM = selectedVM;
             _isAdmin = user.Role == UserRole.Admin;
+
+            menuHeight = _isAdmin ? 50 : 0;
+
+            if (!isAdmin && selectedVM == null)
+            {
+                this.selectedVM = new BooksApplyViewModel(MainVM, user, this);
+            }
 
             SwitchViewCommand = new LambdaCommand(OnSwitchViewCommandExecuted);
             CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted);

@@ -15,6 +15,7 @@
         <convert:IDtoImageConverter x:Key="IDtoImageConverter"/>
         <convert:AppliedStatusToBrushConverter x:Key="AppliedStatusToBrushConverter"/>
         <convert:BookStatustoReadebleStatus x:Key="BookStatustoReadebleStatus"/>
+        <convert:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -27,7 +28,7 @@
         <Rectangle Grid.Row="0" Grid.ColumnSpan="6" Fill="#BFA37C82"></Rectangle>
         <TextBlock Text="Личная библиотека" Grid.ColumnSpan="2" FontSize="27" TextAlignment="Left" VerticalAlignment="Center" Foreground="#F2F1EF" Margin="20,0,0,0" />
         <TextBlock Grid.Row="1" Text="Избранные книги" FontSize="20" TextAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
-        <TextBlock Grid.Row="3" Text="Загруженные книги" FontSize="20" TextAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
+        <TextBlock Grid.Row="3" Text="Загруженные книги" FontSize="20" TextAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0" Visibility="{Binding uploadedBooksVisibility, Converter={StaticResource BooleanToHiddenVisibilityConverter}}"/>
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible" PreviewMouseWheel="Scroll">
             <ListBox ItemsSource="{Binding likedBooksList}" Name="ListBoxLikedBooks" Margin="0 0 20 0">
                 <ListBox.ItemsPanel>
@@ -81,7 +82,7 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>
         </ScrollViewer>
-        <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible" PreviewMouseWheel="Scroll">
+        <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible" PreviewMouseWheel="Scroll" Visibility="{Binding uploadedBooksVisibility, Converter={StaticResource BooleanToHiddenVisibilityConverter}}">
             <ListBox ItemsSource="{Binding uploadedBooksList}" Name="ListBoxUploadedBooks" Margin="0 0 20 0">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
