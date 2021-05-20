@@ -39,7 +39,7 @@ namespace kupca4.ViewModels.Views
             try
             {
                 context.Users.Find((string)p).Blocked = false;
-                context.Books.First(b => b.AuthorName == (string)p && b.Applied == BookStatus.Banned).Applied = BookStatus.NeedModer;
+                context.Books.First(b => b.AuthorName == (string)p && b.Applied == BookStatus.Banned).Applied = BookStatus.Canceled;
                 context.SaveChanges();
                 blockedUsersList = new ObservableCollection<User>(context.Users.Where(u => u.Blocked == true));
             }

@@ -67,6 +67,12 @@ namespace kupca4.ViewModels
             get => Queue;
             set => Set(ref Queue, value);
         }
+
+        public bool menuSpace
+        {
+            get => user.Role == UserRole.Moderator || user.Blocked == true;
+        }
+
         #endregion
 
         #region Commands

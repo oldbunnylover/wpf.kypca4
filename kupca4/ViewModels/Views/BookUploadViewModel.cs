@@ -168,7 +168,7 @@ namespace kupca4.ViewModels.Views
                     editBook.Bookname = title;
                     editBook.Description = description;
                     editBook.GenreId = context.Genres.FirstOrDefault(g => g.Genrename == selectedGenreName).GenreId;
-                    editBook.Applied = BookStatus.NeedModer;
+                    editBook.Applied = editBook.Applied == BookStatus.Banned ? BookStatus.Banned : BookStatus.NeedModer;
                 }
                 context.SaveChanges();
                 try
