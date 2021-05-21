@@ -39,7 +39,7 @@
                 <RowDefinition Height="25"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <materialDesign:Snackbar Grid.Row="2" MessageQueue="{Binding queue}"/>
+            <materialDesign:Snackbar Grid.Row="2" MessageQueue="{Binding queue}" Panel.ZIndex="5"/>
             <Grid VerticalAlignment="Top" Background="#A37C82">
                 <TextBlock WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Left"
                        Text="DUCKLIBRARY" Margin="13.5,4.52,0,4.52" Foreground="#F2F1EF"/>
