@@ -18,17 +18,20 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="56"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Rectangle Grid.Row="0" Grid.ColumnSpan="6" Fill="#BFA37C82"></Rectangle>
-        <TextBlock Text="Каталог" Grid.ColumnSpan="2" FontSize="27" TextAlignment="Left" VerticalAlignment="Center" Foreground="#F2F1EF" Margin="20,0,0,0" />
-        <StackPanel  Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,20,0">
-            <TextBlock Text="Сортировать: " FontSize="16"  Foreground="#22161C"/>
-            <ComboBox Foreground="#535252" FontSize="14" materialDesign:HintAssist.Hint="сортировка" MinWidth="200" 
-                      ItemsSource="{Binding sorting}" SelectedItem="{Binding sortingSelected}" HorizontalContentAlignment="Right" Padding="0,0,0,6.6" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True"
-                      />
-        </StackPanel>
+        <TextBlock Text="Каталог" Grid.ColumnSpan="2" FontSize="27" TextAlignment="Left" VerticalAlignment="Center" Foreground="#F2F1EF" Margin="20,0,0,0"/>
+        <Grid Grid.Row="1" Margin="20,0,20,0">
+            <TextBox materialDesign:HintAssist.Hint="Поиск по названию" materialDesign:HintAssist.HintOpacity=".26" 
+                     Width="450" HorizontalAlignment="Left" Height="25" Text="{Binding searchString, UpdateSourceTrigger=PropertyChanged}"/>
+            <StackPanel  Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,0">
+                <TextBlock Text="Сортировать: " FontSize="16"  Foreground="#22161C" Height="25"/>
+                <ComboBox Foreground="#535252" FontSize="14" materialDesign:HintAssist.Hint="сортировка" MinWidth="200" 
+                      ItemsSource="{Binding sorting}" SelectedItem="{Binding sortingSelected}" HorizontalContentAlignment="Right" Padding="0,0,0,6.6" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True"/>
+            </StackPanel>
+        </Grid>
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Visible" PreviewMouseWheel="Scroll">
             <ListBox ItemsSource="{Binding booksList}" Name="ListBoxBook">
                 <ListBox.ItemTemplate>

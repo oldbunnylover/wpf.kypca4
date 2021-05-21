@@ -1,10 +1,10 @@
 ﻿using kupca4.DB;
 using kupca4.Helpers.Commands;
 using kupca4.ViewModels.Base;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace kupca4.ViewModels.Views
@@ -18,6 +18,7 @@ namespace kupca4.ViewModels.Views
         private readonly List<string> _sorting = new List<string>{ "по новизне", "по алфавиту" };
         private readonly MainWindowViewModel parentVM;
 
+        private string _searchString;
         private string _sortingSelected;
         private ObservableCollection<Book> _booksList;
 
@@ -62,6 +63,26 @@ namespace kupca4.ViewModels.Views
             set => Set(ref _booksList, value);
         }
 
+        public string searchString
+        {
+            get => _searchString;
+            set
+            {
+                try
+                {
+                    Set(ref _searchString, value);
+                    if (value.Length == 0)
+                        sortingSelected = sortingSelected;
+                    else
+                        booksList = new ObservableCollection<Book>(context.Books.Where(b => b.Bookname.StartsWith(value) && b.Applied == BookStatus.Applied));
+                }
+                catch
+                {
+                    parentVM.dialog = true;
+                    parentVM.dialogText = "Отсутствует подключение к интернету.";
+                }
+            }
+        }
 
         #endregion
 
