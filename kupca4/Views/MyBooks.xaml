@@ -133,9 +133,9 @@
                                 <ContextMenu Cursor="Hand">
                                     <MenuItem Header="Редактировать" Command="{Binding Path=PlacementTarget.Tag.EditBookCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" 
                                               CommandParameter="{Binding BookId}"/>
-                                    <MenuItem Header="Скрывать из каталога" Command="{Binding Path=PlacementTarget.Tag.HideBookCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" 
+                                    <MenuItem Header="Удалить из каталога" Command="{Binding Path=PlacementTarget.Tag.HideBookCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" 
                                               CommandParameter="{Binding BookId}"/>
-                                    <MenuItem Header="Показывать в каталоге" Command="{Binding Path=PlacementTarget.Tag.ShowBookCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" 
+                                    <MenuItem Header="Восстановить в каталог" Command="{Binding Path=PlacementTarget.Tag.ShowBookCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" 
                                               CommandParameter="{Binding BookId}"/>
                                 </ContextMenu>
                             </Setter.Value>

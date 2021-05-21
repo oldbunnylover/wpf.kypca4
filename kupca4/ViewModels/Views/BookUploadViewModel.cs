@@ -173,20 +173,17 @@ namespace kupca4.ViewModels.Views
                 context.SaveChanges();
                 try
                 {
-                    //myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _imgPath);
-                    myWebClient.UploadFile($"http://192.168.0.100:3000/upload/{book.BookId}", _imgPath);
+                    myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _imgPath);
                     _updatePicture.BeginInit();
                     _updatePicture.CacheOption = BitmapCacheOption.OnLoad;
                     _updatePicture.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                    //_updatePicture.UriSource = new Uri($"http://localhost:3000/books/{book.BookId}/cover.png");
-                    _updatePicture.UriSource = new Uri($"http://192.168.0.100:3000/books/{book.BookId}/cover.png");
+                    _updatePicture.UriSource = new Uri($"http://localhost:3000/books/{book.BookId}/cover.png");
                     _updatePicture.EndInit();
                 }
                 catch { }
                 try
                 {
-                    //myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _pdfPath);
-                    myWebClient.UploadFile($"http://192.168.0.100:3000/upload/{book.BookId}", _pdfPath);
+                    myWebClient.UploadFile($"http://localhost:3000/upload/{book.BookId}", _pdfPath);
                 }
                 catch { }
 
@@ -254,8 +251,7 @@ namespace kupca4.ViewModels.Views
                     _bookPicture.BeginInit();
                     _bookPicture.CacheOption = BitmapCacheOption.OnLoad;
                     _bookPicture.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                    //_bookPicture.UriSource = new Uri($"http://localhost:3000/books/{bookID}/cover.png");
-                    _bookPicture.UriSource = new Uri($"http://192.168.0.100:3000/books/{bookID}/cover.png");
+                    _bookPicture.UriSource = new Uri($"http://localhost:3000/books/{bookID}/cover.png");
                     _bookPicture.EndInit();
                 }
                 catch

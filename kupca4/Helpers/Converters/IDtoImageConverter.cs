@@ -13,8 +13,7 @@ namespace kupca4.Helpers.Converters
                 BitmapImage imgTemp = new BitmapImage();
                 imgTemp.BeginInit();
                 imgTemp.CacheOption = BitmapCacheOption.OnLoad;
-                //imgTemp.UriSource = new Uri($"http://localhost:3000/books/{(int)value}/cover.png");
-                imgTemp.UriSource = new Uri($"http://192.168.0.100:3000/books/{(int)value}/cover.png");
+                imgTemp.UriSource = new Uri($"http://localhost:3000/books/{(int)value}/cover.png");
                 imgTemp.EndInit();
                 return imgTemp;
             }

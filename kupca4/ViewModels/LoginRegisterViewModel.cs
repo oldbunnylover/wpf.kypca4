@@ -151,8 +151,7 @@ namespace kupca4.ViewModels
         {
             try
             {
-                //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:3000/");
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://192.168.0.100:3000/");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:3000/");
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)

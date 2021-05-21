@@ -20,8 +20,7 @@ namespace kupca4.ViewModels
 
         public ReaderViewModel(Book book)
         {
-            //_bookPath = $"http://localhost:3000/books/{book.BookId}/book.pdf";
-            _bookPath = $"http://192.168.0.100:3000/books/{book.BookId}/book.pdf";
+            _bookPath = $"http://localhost:3000/books/{book.BookId}/book.pdf";
             _title = $"{book.Bookname} - {book.AuthorName}";
         }
     }
