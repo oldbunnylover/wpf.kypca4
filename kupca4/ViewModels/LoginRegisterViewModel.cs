@@ -131,20 +131,6 @@ namespace kupca4.ViewModels
 
         #endregion
 
-        #region ValidationMethods
-
-        public void UsernameInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = new Regex("[^a-zA-Z0-9]$").IsMatch(e.Text);
-        }
-
-        public void SurnameNameInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = new Regex("[^a-zA-Zа-яА-я]$").IsMatch(e.Text);
-        }
-
-        #endregion
-
         #region Checks
 
         private bool ServerCheck()
@@ -196,7 +182,8 @@ namespace kupca4.ViewModels
 
         public ICommand RegisterCommand { get; }
         private bool CanRegisterCommandExecute(object p) => name?.Length > 1 && name?.Length < 16 && surname?.Length > 1 && surname?.Length < 21
-            && registerUsername?.Length > 3 && registerUsername?.Length < 16 && registerPassword?.Length > 0 && !passErrorVisibility;
+            && registerUsername?.Length > 3 && registerUsername?.Length < 16 && registerPassword?.Length > 0 && !passErrorVisibility 
+            && new Regex("[a-zA-Zа-яА-я]$").IsMatch(name) && new Regex("[a-zA-Zа-яА-я]$").IsMatch(surname) && new Regex("[a-zA-Z0-9]$").IsMatch(registerUsername);
 
         private void OnRegisterCommandExecuted(object p)
         {

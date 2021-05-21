@@ -48,13 +48,7 @@
             <TextBlock Grid.Column="0" Height="44" Width="240.25" FontSize="30" 
                    Foreground="#6E304B" Margin="55,40,55,336" Text="Войти в аккаунт"/>
             <TextBox Grid.Column="0" Style="{StaticResource MaterialDesignFilledTextBox}" 
-                 MaxWidth="400" materialDesign:HintAssist.Hint="Псевдоним" Margin="56,150,56,225" Background="#7FA37C82" Text="{Binding loginUsername, UpdateSourceTrigger=PropertyChanged}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="PreviewTextInput" >
-                        <i:CallMethodAction TargetObject="{Binding}" MethodName="UsernameInput"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
+                 MaxWidth="400" materialDesign:HintAssist.Hint="Псевдоним" Margin="56,150,56,225" Background="#7FA37C82" Text="{Binding loginUsername, UpdateSourceTrigger=PropertyChanged}"/>
             <PasswordBox Grid.Column="0" Style="{StaticResource MaterialDesignFilledPasswordBox}" materialDesign:HintAssist.Hint="Пароль" 
                      Margin="56,225,56,150" Background="#7FA37C82">
                 <i:Interaction.Behaviors>
@@ -67,7 +61,7 @@
             <Rectangle Grid.Column="1" RadiusX="15" RadiusY="15" Fill="#A37C82"/>
             <Rectangle Grid.Column="1" Fill="#A37C82" Margin="0,0,319,0"/>
             <TextBlock Height="44" Width="184.8" FontSize="30" Foreground="#F2F1EF" Grid.Column="1" Margin="83,40,82,336" Text="Регистрация"/>
-            <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Content="Зарегистрироваться" 
+            <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Content="Зарегистрироваться"
                 Margin="76,353,76,35" Grid.Column="1" Command="{Binding RegisterCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:LoginRegister}}"
                 materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding loading}" materialDesign:ButtonProgressAssist.IsIndeterminate="True"/>
             <TextBox MaxWidth="400" Style="{StaticResource MaterialDesignFilledTextBox}" materialDesign:HintAssist.Hint="Псевдоним"
@@ -77,14 +71,10 @@
                     <Binding Path="registerUsername" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <validation:LengthRule MaximumLength="15" MinimumLength="4" ValidationStep="UpdatedValue"/>
+                            <validation:RegexRule fieldName="Login" ValidationStep="UpdatedValue"/>
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="PreviewTextInput" >
-                        <i:CallMethodAction TargetObject="{Binding}" MethodName="UsernameInput"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
             </TextBox>
             <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Фамилия" 
                  Margin="56,157,56,219" Background="#B4F2F1EF" Grid.Column="1" materialDesign:ValidationAssist.Background="#7FF4F4F4"
@@ -93,14 +83,10 @@
                     <Binding Path="surname" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <validation:LengthRule MaximumLength="20" MinimumLength="2" ValidationStep="UpdatedValue"/>
+                            <validation:RegexRule fieldName="SurnameName" ValidationStep="UpdatedValue"/>
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="PreviewTextInput" >
-                        <i:CallMethodAction TargetObject="{Binding}" MethodName="SurnameNameInput"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
             </TextBox>
             <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" MaxWidth="400" materialDesign:HintAssist.Hint="Имя" 
                  Margin="56,218,56,157" Background="#B4F2F1EF" Grid.Column="1" materialDesign:ValidationAssist.Background="#7FF4F4F4"
@@ -109,14 +95,10 @@
                     <Binding Path="name" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <validation:LengthRule MaximumLength="15" MinimumLength="2" ValidationStep="UpdatedValue"/>
+                            <validation:RegexRule fieldName="SurnameName" ValidationStep="UpdatedValue"/>
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="PreviewTextInput" >
-                        <i:CallMethodAction TargetObject="{Binding}" MethodName="SurnameNameInput"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
             </TextBox>
             <PasswordBox x:Name="passBox" Style="{StaticResource MaterialDesignFilledPasswordBox}" materialDesign:HintAssist.Hint="Пароль" 
                      Margin="56,280,56,95" Background="#B2F2F1EF" Grid.Column="1">
