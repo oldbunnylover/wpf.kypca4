@@ -364,7 +364,7 @@ namespace kupca4.ViewModels
                 Queue.Enqueue("Одна или несколько ваших книг не прошли модерацию.", null, null, null, false, false, durability);
 
             if (user.Email == null)
-                Queue.Enqueue("У вас не указана электронная почта. Установить её можно в настройках аккаунта.", null, null, null, false, false, durability);
+                Queue.Enqueue("У вас не указана электронная почта. Проверьте настройки аккаунта.", null, null, null, false, false, durability);
 
             WindowMinimizedCommand = new LambdaCommand(OnWindowMinimizedCommandExecuted);
             WindowMaximizeCommand = new LambdaCommand(OnWindowMaximizeCommandExecuted);
