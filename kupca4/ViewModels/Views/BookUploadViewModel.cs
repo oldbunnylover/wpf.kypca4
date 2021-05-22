@@ -188,7 +188,7 @@ namespace kupca4.ViewModels.Views
                 catch { }
 
                 dialog = true;
-                dialogText = "Загрузка выполнена успешно!";
+                dialogText = "Книга отправлена на модерацию.";
                 RestoreForm();
             }
             catch
