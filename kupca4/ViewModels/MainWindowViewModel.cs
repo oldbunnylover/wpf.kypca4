@@ -122,7 +122,12 @@ namespace kupca4.ViewModels
         public string email
         {
             get => _email;
-            set => Set(ref _email, value);
+            set
+            {
+                Set(ref _email, value);
+                confirmEmailButton = true;
+                confirmCodeEmailVisability = false;
+            }
         }
 
         public string newPassword
@@ -156,7 +161,12 @@ namespace kupca4.ViewModels
         public string repeatNewPassword
         {
             get => _repeatNewPassword;
-            set => Set(ref _repeatNewPassword, value);
+            set
+            {
+                Set(ref _repeatNewPassword, value);
+                if(passErrorVisibility && passError == "Пароли не совпадают.")
+                    passErrorVisibility = false;
+            }
         }
 
         public SnackbarMessageQueue queue
@@ -249,7 +259,6 @@ namespace kupca4.ViewModels
                     SendEmail(email, code);
                     confirmEmailButton = false;
                     confirmCodeEmailVisability = true;
-                    isUserEmailNull = true;
                 }
                 else
                 {
@@ -270,7 +279,7 @@ namespace kupca4.ViewModels
         {
             try
             {
-                if (confirmCodeEmail?.Length > 0)
+                if (confirmCodeEmail?.Length > 0 && confirmCodeEmailVisability)
                 {
                     if(code.ToString() == confirmCodeEmail)
                     {
@@ -297,8 +306,8 @@ namespace kupca4.ViewModels
                     }
                     else
                     {
-                        dialogText = "Пароли не совпадают.";
-                        dialog = true;
+                        passError = "Пароли не совпадают.";
+                        passErrorVisibility = true;
                     }
                 }
             }
