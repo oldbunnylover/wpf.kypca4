@@ -36,7 +36,7 @@
                 </StackPanel>
             </Border>
         </materialDesign:DialogHost.DialogContent>
-        <materialDesign:DialogHost OverlayBackground="Transparent" CloseOnClickAway="True" IsOpen="{Binding dialogSettings}">
+        <materialDesign:DialogHost OverlayBackground="Transparent" IsOpen="{Binding dialogSettings}">
             <materialDesign:DialogHost.DialogContent>
                 <Border Height="Auto" Width="400">
                     <StackPanel Margin="16">

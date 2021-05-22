@@ -17,7 +17,7 @@
     <Window.DataContext>
         <vm:LoginRegisterViewModel/>
     </Window.DataContext>
-    <materialDesign:DialogHost CloseOnClickAway="True"
+    <materialDesign:DialogHost CloseOnClickAway="True" OverlayBackground="Transparent"
         IsOpen="{Binding dialog}">
         <materialDesign:DialogHost.DialogContent>
             <Border Height="Auto" Width="Auto">
@@ -38,6 +38,30 @@
                 </StackPanel>
             </Border>
         </materialDesign:DialogHost.DialogContent>
+        <materialDesign:DialogHost OverlayBackground="Transparent" IsOpen="{Binding resetPasswordVisiblity}">
+            <materialDesign:DialogHost.DialogContent>
+                <Border Height="Auto" Width="300">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="Восстановление пароля" FontSize="18" Margin="0 0 0 20"/>
+                        <TextBox Text="{Binding resetUsername, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Псевдоним" Margin="0 0 0 15"/>
+                        <TextBox materialDesign:HintAssist.Hint="Электронная почта">
+                            <TextBox.Text>
+                                <Binding Path="resetEmail" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:RegexRule fieldName="Email" ValidationStep="UpdatedValue"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <StackPanel Orientation="Horizontal" Margin="0 20 0 0" HorizontalAlignment="Center">
+                            <Button Style="{StaticResource MaterialDesignFlatAccentButton}" Margin="0 0 20 0"
+                                Content="Отправить" Foreground="#6E304B" Width="120" Height="30" Command="{Binding ResetPasswordCommand}"/>
+                            <Button Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                Content="Закрыть" Foreground="#6E304B" Width="120" Height="30" Command="{Binding CloseResetPasswordCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </materialDesign:DialogHost.DialogContent>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -55,6 +79,23 @@
                     <bh:PasswordBehavior Password="{Binding loginPassword, Mode=TwoWay}" />
                 </i:Interaction.Behaviors>
             </PasswordBox>
+            <TextBlock Text="Забыли пароль?" Margin="76,387,76,10" TextAlignment="Center" Cursor="Hand">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="#CC6E304B"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#6E304B"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                        <i:InvokeCommandAction Command="{Binding OpenResetPasswordCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBlock>
             <Button Grid.Column="0" Style="{StaticResource MaterialDesignRaisedButton}" materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding loading}" 
                 materialDesign:ButtonProgressAssist.IsIndeterminate="True" Content="Войти" Margin="76,353,76,35"
                 Command="{Binding Path=LoginCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:LoginRegister}}"/>
@@ -117,5 +158,6 @@
                 </Button.Command>
             </Button>
         </Grid>
+    </materialDesign:DialogHost>
     </materialDesign:DialogHost>
 </Window>

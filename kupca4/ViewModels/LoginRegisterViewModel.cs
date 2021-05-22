@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,7 +28,10 @@ namespace kupca4.ViewModels
         private bool _closeDialogButtonVisibility = false;
         private string _dialogText;
         private string _passError;
+        private string _reserUsername;
+        private string _resetEmail;
         private bool _passErrorVisibility = false;
+        private bool _resetPasswordVisiblity = false;
 
         #endregion
 
@@ -36,6 +41,18 @@ namespace kupca4.ViewModels
         {
             get => _passError;
             set => Set(ref _passError, value);
+        }
+
+        public string resetUsername
+        {
+            get => _reserUsername;
+            set => Set(ref _reserUsername, value);
+        }
+
+        public string resetEmail
+        {
+            get => _resetEmail;
+            set => Set(ref _resetEmail, value);
         }
 
         public bool errorMsg
@@ -54,6 +71,12 @@ namespace kupca4.ViewModels
         {
             get => _passErrorVisibility;
             set => Set(ref _passErrorVisibility, value);
+        }
+        
+        public bool resetPasswordVisiblity
+        {
+            get => _resetPasswordVisiblity;
+            set => Set(ref _resetPasswordVisiblity, value);
         }
 
         public string name
@@ -178,6 +201,31 @@ namespace kupca4.ViewModels
 
         #endregion
 
+        #region mailSend
+
+        private void SendEmail(string mail, string username, string password)
+        {
+            try
+            {
+                MailAddress from = new MailAddress("ducklibrarynoreply@gmail.com", "DuckLibrary");
+                MailAddress to = new MailAddress(mail);
+                MailMessage m = new MailMessage(from, to);
+                m.Subject = "Восстановление пароля DuckLibrary";
+                m.Body = $"Здравствуйте! Вот ваш новый пароль для аккаунта {username}:\n{password}";
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+                smtp.Credentials = new NetworkCredential("ducklibrarynoreply@gmail.com", "NotReallyPassWord");
+                smtp.EnableSsl = true;
+                smtp.SendMailAsync(m);
+            }
+            catch
+            {
+                dialogText = "Отсутствует подключение к интернету.";
+                dialog = true;
+            }
+        }
+
+        #endregion
+
         #region Commands
 
         public ICommand RegisterCommand { get; }
@@ -256,6 +304,17 @@ namespace kupca4.ViewModels
         public ICommand CloseDialogCommand { get; }
         private void OnCloseDialogCommandExecuted(object p) => dialog = false;
 
+        public ICommand OpenResetPasswordCommand { get; }
+        private void OnOpenResetPasswordCommandExecuted(object p) => resetPasswordVisiblity = true;
+
+        public ICommand CloseResetPasswordCommand { get; }
+        private void OnCloseResetPasswordCommandExecuted(object p)
+        {
+            resetEmail = null;
+            resetUsername = null;
+            resetPasswordVisiblity = false;
+        }
+
         public ICommand TryAgainCommand { get; }
         private void OnTryAgainCommandExecuted(object p)
         {
@@ -263,6 +322,35 @@ namespace kupca4.ViewModels
             DataBaseAsync();
         }
 
+        public ICommand ResetPasswordCommand { get; }
+        private bool CanResetPasswordCommandExecute(object p) => resetEmail?.Length > 0 && resetUsername?.Length > 0 && new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$").IsMatch(resetEmail);
+        private void OnResetPasswordCommandExecuted(object p)
+        {
+            try
+            {
+                if (context.Users.FirstOrDefault(u => u.Username == resetUsername && u.Email == resetEmail) != null)
+                {
+                    string password = User.getHash(new Random().Next(1, 10000).ToString()).Substring(10);
+                    SendEmail(resetEmail, resetUsername, password);
+                    context.Users.Find(resetUsername).Password = User.getHash(password);
+                    context.SaveChanges();
+
+                    OnCloseResetPasswordCommandExecuted(true);
+                    dialogText = "Пароль успешно сброшен. Проверьте свою почту.";
+                    dialog = true;
+                }
+                else
+                {
+                    dialogText = "Пользователь с такими данными не зарегистрирован.";
+                    dialog = true;
+                }
+            }
+            catch
+            {
+                dialogText = "Отсутствует подключение к интернету.";
+                dialog = true;
+            }
+        }
 
         #endregion
 
@@ -272,8 +360,11 @@ namespace kupca4.ViewModels
 
             RegisterCommand = new LambdaCommand(OnRegisterCommandExecuted, CanRegisterCommandExecute);
             CloseDialogCommand = new LambdaCommand(OnCloseDialogCommandExecuted);
+            OpenResetPasswordCommand = new LambdaCommand(OnOpenResetPasswordCommandExecuted);
+            CloseResetPasswordCommand = new LambdaCommand(OnCloseResetPasswordCommandExecuted);
             TryAgainCommand = new LambdaCommand(OnTryAgainCommandExecuted);
             LoginCommand = new LambdaCommand(OnLoginCommandExecuted, CanLoginCommandExecute);
+            ResetPasswordCommand = new LambdaCommand(OnResetPasswordCommandExecuted, CanResetPasswordCommandExecute);
 
             #endregion
 

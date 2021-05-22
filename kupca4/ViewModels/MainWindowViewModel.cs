@@ -360,8 +360,11 @@ namespace kupca4.ViewModels
 
             TimeSpan durability = new TimeSpan(0, 0, 5);
 
-                if (context.Books.FirstOrDefault(b => b.AuthorName == user.Username && b.Applied == BookStatus.Canceled) != null)
-                    Queue.Enqueue("Одна или несколько ваших книг не прошли модерацию.", null, null, null, false, false, durability);
+            if (context.Books.FirstOrDefault(b => b.AuthorName == user.Username && b.Applied == BookStatus.Canceled) != null)
+                Queue.Enqueue("Одна или несколько ваших книг не прошли модерацию.", null, null, null, false, false, durability);
+
+            if (user.Email == null)
+                Queue.Enqueue("У вас не указана электронная почта. Установить её можно в настройках аккаунта.", null, null, null, false, false, durability);
 
             WindowMinimizedCommand = new LambdaCommand(OnWindowMinimizedCommandExecuted);
             WindowMaximizeCommand = new LambdaCommand(OnWindowMaximizeCommandExecuted);
