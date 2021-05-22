@@ -155,6 +155,10 @@ namespace kupca4.DB
                 entity.Property(e => e.Role)
                     .HasColumnName("role")
                     .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Email)
+                    .HasColumnName("email")
+                    .HasMaxLength(255);
             });
 
             modelBuilder.Entity<BookRates>(entity =>

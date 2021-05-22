@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cmd="clr-namespace:kupca4.Helpers.Commands"
         xmlns:vm="clr-namespace:kupca4.ViewModels"
+        xmlns:bh="clr-namespace:kupca4.Helpers.Behaviors"
+        xmlns:validation="clr-namespace:kupca4.Helpers.Validation"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:kupca4"
         xmlns:convert="clr-namespace:kupca4.Helpers.Converters"
@@ -34,7 +36,50 @@
                 </StackPanel>
             </Border>
         </materialDesign:DialogHost.DialogContent>
-        <Grid>
+        <materialDesign:DialogHost OverlayBackground="Transparent" CloseOnClickAway="True" IsOpen="{Binding dialogSettings}">
+            <materialDesign:DialogHost.DialogContent>
+                <Border Height="Auto" Width="400">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="Настройки аккаунта:" FontSize="20" Margin="0 0 0 25"/>
+                        <TextBox Text="{Binding User.Username}" IsReadOnly="True" Margin="0 0 0 20"/>
+                        <TextBox materialDesign:HintAssist.Hint="Электронная почта" IsReadOnly="{Binding isUserEmailNull}" Margin="0 0 0 10">
+                            <TextBox.Text>
+                                <Binding Path="email" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:RegexRule fieldName="Email" ValidationStep="UpdatedValue"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Button Content="Подтвердить почту" Style="{StaticResource MaterialDesignFlatAccentButton}" Foreground="#6E304B" Margin="0 0 0 25" Width="200"
+                                Visibility="{Binding confirmEmailButton, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding ConfirmEmailCommand}"/>
+                        <TextBox materialDesign:HintAssist.Hint="Проверочный код" Margin="0 0 0 25" Text="{Binding confirmCodeEmail, UpdateSourceTrigger=PropertyChanged}"
+                                 Visibility="{Binding confirmCodeEmailVisability, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Text="Смена пароля:" FontSize="15" Margin="0 0 0 15"/>
+                        <PasswordBox materialDesign:HintAssist.Hint="Новый пароль">
+                            <i:Interaction.Behaviors>
+                                <bh:PasswordBehavior Password="{Binding newPassword, Mode=TwoWay}"/>
+                            </i:Interaction.Behaviors>
+                        </PasswordBox>
+                        <Border BorderBrush="{x:Null}">
+                            <TextBlock Background="#7FF4F4F4" Visibility="{Binding passErrorVisibility, Converter={StaticResource BooleanToHiddenVisibilityConverter}}" VerticalAlignment="Top" MinHeight="16"
+                   Text="{Binding passError}" FontSize="10" Foreground="{StaticResource MaterialDesignValidationErrorBrush}" TextWrapping="Wrap" d:Visibility="Visible"/>
+                        </Border>
+                        <PasswordBox materialDesign:HintAssist.Hint="Повтор пароля" Margin="0 10 0 0">
+                            <i:Interaction.Behaviors>
+                                <bh:PasswordBehavior Password="{Binding repeatNewPassword, Mode=TwoWay}"/>
+                            </i:Interaction.Behaviors>
+                        </PasswordBox>
+                        <StackPanel Orientation="Horizontal" Margin="0 10 0 0" HorizontalAlignment="Center">
+                            <Button Style="{StaticResource MaterialDesignFlatAccentButton}" Margin="0 0 30 0"
+                                Content="Применить" Foreground="#6E304B" Width="120" Height="30" Command="{Binding ApplyDialogSettingsCommand}"/>
+                            <Button Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                Content="Закрыть" Foreground="#6E304B" Width="120" Height="30" Command="{Binding CloseDialogSettingsCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </materialDesign:DialogHost.DialogContent>
+            <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition/>
@@ -44,6 +89,12 @@
                 <TextBlock WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Left"
                        Text="DUCKLIBRARY" Margin="13.5,4.52,0,4.52" Foreground="#F2F1EF"/>
                 <StackPanel WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" ToolTip="{Binding User}" Command="{Binding ShowDialogSettingsCommand}">
+                        <materialDesign:PackIcon Kind="User" />
+                    </Button>
+                    <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Command="{Binding WindowMinimizedCommand}" Visibility="Hidden">
+                        <materialDesign:PackIcon Kind="WindowMinimize" />
+                    </Button>
                     <Button Padding="1" Width="25" Height="25" Background="Transparent" BorderBrush="Transparent" Command="{Binding WindowMinimizedCommand}">
                         <materialDesign:PackIcon Kind="WindowMinimize" />
                     </Button>
@@ -130,5 +181,6 @@
             </StackPanel>
             <ContentControl Grid.Row="1" Content="{Binding selectedVM}" Margin="56,0,0,0"/>
         </Grid>
+    </materialDesign:DialogHost>
     </materialDesign:DialogHost>
 </Window>

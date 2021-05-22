@@ -18,11 +18,15 @@ namespace kupca4.Helpers.Validation
             {
                 case "Login":
                     msg = "Поле может содержать только цифры и латиницу.";
-                    regex = new Regex("[^a-zA-Z0-9]$");
+                    regex = new Regex("[a-zA-Z0-9]$");
                     break;
                 case "SurnameName":
                     msg = "Поле может содержать только кириллицу и латиницу.";
-                    regex = new Regex("[^a-zA-Zа-яА-я]$");
+                    regex = new Regex("[a-zA-Zа-яА-я]$");
+                    break;
+                case "Email":
+                    msg = "Неверный формат электронной почты.";
+                    regex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
                     break;
                 default:
                     msg = "Некорректный ввод.";
@@ -31,10 +35,11 @@ namespace kupca4.Helpers.Validation
 
             if (regex.IsMatch(charString))
             {
-               return new ValidationResult(false, msg);
+                return ValidationResult.ValidResult;
             }
 
-            return ValidationResult.ValidResult;
+            return new ValidationResult(false, msg);
+
         }
     }
 }

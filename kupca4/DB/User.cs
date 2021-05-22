@@ -27,6 +27,7 @@ namespace kupca4.DB
         public string Fullname { get; set; }
         public string Password { get; set; }
         public bool? Blocked { get; set; }
+        public string Email { get; set; }
 
         public User(string name, string surname, string username, string password)
         {
