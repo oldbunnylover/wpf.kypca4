@@ -51,11 +51,11 @@
                                 </Binding>
                             </TextBox.Text>
                         </TextBox>
-                        <Button Content="Подтвердить почту" Style="{StaticResource MaterialDesignFlatAccentButton}" Foreground="#6E304B" Margin="0 0 0 25" Width="200"
+                        <Button Content="Подтвердить почту" Style="{StaticResource MaterialDesignFlatAccentButton}" Foreground="#6E304B" Width="200"
                                 Visibility="{Binding confirmEmailButton, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding ConfirmEmailCommand}"/>
-                        <TextBox materialDesign:HintAssist.Hint="Проверочный код" Margin="0 0 0 25" Text="{Binding confirmCodeEmail, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox materialDesign:HintAssist.Hint="Проверочный код" Text="{Binding confirmCodeEmail, UpdateSourceTrigger=PropertyChanged}"
                                  Visibility="{Binding confirmCodeEmailVisability, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                        <TextBlock Text="Смена пароля:" FontSize="15" Margin="0 0 0 15"/>
+                        <TextBlock Text="Смена пароля:" FontSize="15" Margin="0 25 0 15"/>
                         <PasswordBox materialDesign:HintAssist.Hint="Новый пароль">
                             <i:Interaction.Behaviors>
                                 <bh:PasswordBehavior Password="{Binding newPassword, Mode=TwoWay}"/>

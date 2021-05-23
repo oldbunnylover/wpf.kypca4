@@ -125,6 +125,7 @@ namespace kupca4.ViewModels
             set
             {
                 Set(ref _email, value);
+                confirmCodeEmail = null;
                 confirmEmailButton = true;
                 confirmCodeEmailVisability = false;
             }
@@ -274,7 +275,7 @@ namespace kupca4.ViewModels
         }
 
         public ICommand ApplyDialogSettingsCommand { get; }
-        private bool CanApplyDialogSettingsCommandExecute(object p) => !passErrorVisibility && (confirmCodeEmail?.Length > 0 || !confirmCodeEmailVisability);
+        private bool CanApplyDialogSettingsCommandExecute(object p) => !passErrorVisibility && (confirmCodeEmail?.Length > 0 || !confirmCodeEmailVisability) && (confirmCodeEmail?.Length > 0 || newPassword?.Length > 0);
         private void OnApplyDialogSettingsCommandExecuted(object p)
         {
             try
@@ -286,6 +287,7 @@ namespace kupca4.ViewModels
                         context.Users.Find(user.Username).Email = email;
                         context.SaveChanges();
                         user = context.Users.Find(user.Username);
+                        confirmCodeEmail = null;
                         confirmCodeEmailVisability = false;
                         isUserEmailNull = true;
                     }
